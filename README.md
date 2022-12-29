@@ -23,12 +23,12 @@ Change the keycodes used in the file appropriately according to your keyboard.
 1. Start `skhd` as a service or directly on terminal.
 I personally use `skhd -V` on terminal.
 1. Type "[Ctrl]-[KANA] S S" to start a yabai service.
-1. Type "[Ctrl]-[EISU]"
+1. Type "[Ctrl]-[EISU]" to suppress the pop-up window.
 
 ### yabai modes
 _yabai modes_ are modes defined in `.skhdrc` for interacting with yabai.
 - To enter the initial mode _yabai-home-mode_, type "[Ctrl]-[KANA]".
-- Follow the instructions in the popped up window.
+- Follow the instructions in the pop-up window.
 - To exit any yabai mode and stop interacting with yabai, type "[Ctrl]-[EISU]".
 
 ## Tips
