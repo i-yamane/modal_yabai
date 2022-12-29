@@ -1,4 +1,4 @@
-# modai_yabai
+# modal_yabai
 Modal keybindings for yabai + skhd
 
 ## Dependencies
