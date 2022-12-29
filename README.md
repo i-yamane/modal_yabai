@@ -11,7 +11,7 @@ Modal keybindings for yabai + skhd
 Place the content of
 - `dot_skhdrc` to `~/.skhdrc`
 - `dot_yabairc` to `~/.yabairc`
-- `dot_zshrc` to `~/.zshrc`
+- `dot_zshenv` to `~/.zshenv`
 - `dot_hammerspoon/init.lua` to `~/.hammerspoon/init.lua`
 
 `.skhdrc` assumes the Japanese keyboard of Macbooks.
