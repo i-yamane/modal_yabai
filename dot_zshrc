@@ -1,0 +1,58 @@
+function yabai_2way_vertical {
+    yabai -m space --layout bsp \
+        && yabai -m window --focus last \
+        && yabai -m window --focus prev \
+        && while [[ $? -eq 0 ]]; do
+            yabai -m window --stack prev
+        done
+}
+
+function yabai_2way_horizontal {
+    yabai -m space --layout bsp \
+        && yabai -m window --focus last \
+        && yabai -m window --toggle split \
+        && yabai -m window --focus prev \
+        && while [[ $? -eq 0 ]]; do
+            yabai -m window --stack prev
+        done
+}
+
+function yabai_pop_stack_right {
+    yabai -m window --warp east \
+        && yabai -m window --focus south \
+        && yabai -m window --stack north
+}
+
+function yabai_pop_stack_right {
+    yabai -m window --warp east \
+        && while [[ $? -eq 0 ]]; do
+            yabai -m window --stack south
+        done
+}
+
+function yabai_pop_stack_left {
+    yabai -m window --warp west \
+        && yabai -m window --focus north \
+        && yabai -m window --stack south
+}
+
+function yabai_pop_stack_left2 {
+    yabai -m window --warp west \
+        && while [[ $? -eq 0 ]]; do
+            yabai -m window --stack south
+        done
+}
+
+function yabai_pop_stack_above {
+    yabai -m window --warp north \
+        && while [[ $? -eq 0 ]]; do
+            yabai -m window --stack west
+        done
+}
+
+function yabai_pop_stack_below {
+    yabai -m window --warp south \
+        && while [[ $? -eq 0 ]]; do
+            yabai -m window --stack west
+        done
+}

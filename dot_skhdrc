@@ -1,0 +1,2071 @@
+# Key code:
+# 0x1E = '['
+# 0x66 = <EISU>
+# 0x68 = <KANA>
+:: default : hs -c "hs.alert.closeAll(); hs.alert.show(\"\
+yabai-off mode\n\
+  C-<KANA> OR CMD-<KANA>: yabai-home mode\",\
+0.5)"
+default < ctrl - 0x66 ; default
+
+
+# <KANA>: yabaimode
+# Commands with "yabaimode <" will only work in yabaimode
+:: yabaimode : hs -c "hs.alert.closeAll(); hs.alert.show(\"\
+yabai-home mode\n\
+  <TAB>: Focus\n\
+  m: move\n\
+  f: float\n\
+  l: layout\n\
+  s: sizes\n\
+  <SPC>: stack\n\
+  S: sevice\n\
+  C-<KANA> OR CMD-<KANA>: back to yabai-home mode\n\
+  C-<EISU> OR CMD-<EISU>: back to yabai-off mode\",\
+100)"
+default, yabaimode < ctrl - 0x68 ; yabaimode  # Activate yabaimode.
+default, yabaimode < cmd - 0x68 ; yabaimode  # Activate yabaimode.
+# yabaimode < ctrl - 0x1E ; default    # Go back to default mode.
+# yabaimode < q ; default   # Go back to default mode.
+yabaimode < ctrl - 0x66 ; default  # Go back to default mode.
+yabaimode < cmd - 0x66 ; default  # Go back to default mode.
+
+
+# <TAB>: focus window
+:: yabaimode_focus : hs -c "hs.alert.closeAll(); hs.alert.show(\"\
+yabai-focus mode\n\
+  h: west\n\
+  l: east\n\
+  j: south\n\
+  k: north\n\
+  <TAB>: recent in stack\n\
+  J: next in stack\n\
+  K: prev in stack\n\
+  S-1: 1st in stack\n\
+  S-0: last in stack\n\
+  C-<SPC>: insert west\n\
+  C-<KANA> OR CMD-<KANA>: back to yabai-home mode\n\
+  C-<EISU> OR CMD-<EISU>: back to yabai-off mode\",\
+100)"
+yabaimode < tab ; yabaimode_focus
+# yabaimode_focus < ctrl - 0x1E ; default    # Go back to default mode. 0x1E is [ key on MBA (ja)
+# yabaimode_focus < escape ; default    # Go back to default mode. 0x1E is [ key on MBA (ja)
+yabaimode_focus < ctrl - 0x68 ; yabaimode  # Go back to yabai-home mode. 0x68 is kana key on MBA (ja)
+yabaimode_focus < cmd - 0x68 ; yabaimode  # Go back to yabai-home mode. 0x68 is kana key on MBA (ja)
+yabaimode_focus < ctrl - 0x66 ; default  # Go back to default mode.
+yabaimode_focus < cmd - 0x66 ; default  # Go back to default mode.
+
+yabaimode_focus < h : yabai -m window --focus west
+yabaimode_focus < l : yabai -m window --focus east
+yabaimode_focus < j : yabai -m window --focus south
+yabaimode_focus < k : yabai -m window --focus north
+
+## set insertion point in focused container:
+yabaimode_focus < ctrl - space : yabai -m window --insert west
+
+# focus previous or next window in window tree (options: prev, next)
+yabaimode_focus < ctrl - p : yabai -m window --focus prev
+yabaimode_focus < ctrl - n : yabai -m window --focus next
+
+## focus the most recently focused window in a stack
+yabaimode_focus < tab : yabai -m window --focus stack.recent
+## focus the prev window in a stack
+yabaimode_focus < shift - j : yabai -m window --focus stack.next
+## focus the next window in a stack
+yabaimode_focus < shift - k : yabai -m window --focus stack.prev
+## focus the first window in a stack
+yabaimode_focus < shift - 1 : yabai -m window --focus stack.first
+## focus the last window in a stack
+yabaimode_focus < shift - 0 : yabai -m window --focus stack.last
+
+# ## fast focus desktop:
+# yabaimode_focus < x : yabai -m space --focus recent
+# yabaimode_focus < 1 : yabai -m space --focus 1
+
+
+# m: Move managed window -----
+:: yabaimode_move : hs -c "hs.alert.closeAll(); hs.alert.show(\"\
+yabai-move mode\n\
+  h: move west\n\
+  l: move east\n\
+  j: move south\n\
+  k: move north\n\
+  S-h: swap west\n\
+  S-l: swap east\n\
+  S-j: swap south\n\
+  S-k: swap north\n\
+  S-m: minimize\n\
+  C-<KANA> OR CMD-<KANA>: back to yabai-home mode\n\
+  C-<EISU> OR CMD-<EISU>: back to yabai-off mode\",\
+100)"
+yabaimode < m ; yabaimode_move
+# yabaimode_move < ctrl - 0x1E ; default    # Go back to default mode. 0x1E is [ key on MBA (ja)
+# yabaimode_move < escape ; default    # Go back to default mode. 0x1E is [ key on MBA (ja)
+yabaimode_move < ctrl - 0x68 ; yabaimode  # Go back to yabai-home mode. 0x68 is kana key on MBA (ja)
+yabaimode_move < cmd - 0x68 ; yabaimode  # Go back to yabai-home mode. 0x68 is kana key on MBA (ja)
+yabaimode_move < ctrl - 0x66 ; default  # Go back to default mode.
+yabaimode_move < cmd - 0x66 ; default  # Go back to default mode.
+
+## Moving one window
+yabaimode_move < h : yabai -m window --warp west
+yabaimode_move < l : yabai -m window --warp east
+yabaimode_move < j : yabai -m window --warp south
+yabaimode_move < k : yabai -m window --warp north
+
+## Swapping move
+yabaimode_move < shift - h : yabai -m window --swap west
+yabaimode_move < shift - l : yabai -m window --swap east
+yabaimode_move < shift - j : yabai -m window --swap south
+yabaimode_move < shift - k : yabai -m window --swap north
+
+yabaimode_move < shift - m : yabai -m window --minimize
+
+# f: Floating window management -----
+:: yabaimode_float : hs -c "hs.alert.closeAll(); hs.alert.show(\"\
+yabai-float mode\n\
+  f: toggle floating\n\
+  h: move west\n\
+  l: move east\n\
+  j: move south\n\
+  k: move north\n\
+  S-f: fill screen\n\
+  S-h: fill west\n\
+  S-l: fill east\n\
+  S-j: fill south\n\
+  S-k: fill north\n\
+  C-<KANA> OR CMD-<KANA>: back to yabai-home mode\n\
+  C-<EISU> OR CMD-<EISU>: back to yabai-off mode\",\
+100)"
+yabaimode < f ; yabaimode_float
+# yabaimode_float < ctrl - 0x1E ; default    # Go back to default mode. 0x1E is [ key on MBA (ja)
+# yabaimode_float < escape ; default    # Go back to default mode. 0x1E is [ key on MBA (ja)
+yabaimode_float < ctrl - 0x68 ; yabaimode  # Go back to yabai-home mode. 0x68 is kana key on MBA (ja)
+yabaimode_float < cmd - 0x68 ; yabaimode  # Go back to yabai-home mode. 0x68 is kana key on MBA (ja)
+yabaimode_float < ctrl - 0x66 ; default  # Go back to default mode.
+yabaimode_float < cmd - 0x66 ; default  # Go back to default mode.
+
+# float / unfloat window and center on screen:
+yabaimode_float < f  : yabai -m window --toggle float;\
+                       yabai -m window --grid 4:4:1:1:2:2
+## make floating window fill screen:
+yabaimode_float < shift - f  : yabai -m window --grid 1:1:0:0:1:1
+## make floating window fill left-half of screen:
+yabaimode_float < shift - h  : yabai -m window --grid 1:2:0:0:1:1
+## make floating window fill right-half of screen:
+yabaimode_float < shift - l  : yabai -m window --grid 1:2:1:0:1:1
+## make floating window fill upper-half of screen:
+yabaimode_float < shift - k  : yabai -m window --grid 2:1:0:0:1:1
+## make floating window fill lower-half of screen:
+yabaimode_float < shift - j  : yabai -m window --grid 2:1:0:1:1:1
+## move floating window:
+yabaimode_float < h : yabai -m window --move rel:-20:0
+yabaimode_float < j : yabai -m window --move rel:0:20
+yabaimode_float < l : yabai -m window --move rel:20:0
+yabaimode_float < k : yabai -m window --move rel:0:-20
+
+
+# l: Layout -----
+:: yabaimode_layout : hs -c "hs.alert.closeAll(); hs.alert.show(\"\
+yabai-layout mode\n\
+  l: toggle window-split type\n\
+  z: toggle zoom-fullscreen\n\
+  p: toggle zoom-parent\n\
+  v: 2way vertical layout\n\
+  h: 2way horizontal layout\n\
+  b: bsp layout\n\
+  s: stack layout\n\
+  f: float\n\
+  t: toggle sticky(+float), topmost, picture-in-picture\n\
+  C-<KANA> OR CMD-<KANA>: back to yabai-home mode\n\
+  C-<EISU> OR CMD-<EISU>: back to yabai-off mode\",\
+100)"
+yabaimode < l ; yabaimode_layout
+# yabaimode_layout < ctrl - 0x1E ; default    # Go back to default mode. 0x1E is [ key on MBA (ja)
+# yabaimode_layout < escape ; default    # Go back to default mode. 0x1E is [ key on MBA (ja)
+yabaimode_layout < ctrl - 0x68 ; yabaimode  # Go back to yabai-home mode. 0x68 is kana key on MBA (ja)
+yabaimode_layout < cmd - 0x68 ; yabaimode  # Go back to yabai-home mode. 0x68 is kana key on MBA (ja)
+yabaimode_layout < ctrl - 0x66 ; default  # Go back to default mode.
+yabaimode_layout < cmd - 0x66 ; default  # Go back to default mode.
+
+yabaimode_layout < l : yabai -m window --toggle split  # toggle window split type
+yabaimode_layout < z : yabai -m window --toggle zoom-fullscreen
+yabaimode_layout < p : yabai -m window --toggle zoom-parent
+
+yabaimode_layout < b : yabai -m space --layout bsp
+yabaimode_layout < s : yabai -m space --layout stack
+yabaimode_layout < f : yabai -m space --layout float
+yabaimode_layout < v : yabai_2way_vertical
+yabaimode_layout < h : yabai_2way_horizontal
+
+## toggle sticky(+float), topmost, picture-in-picture
+yabaimode_layout < t : yabai -m window --toggle sticky;\
+                       yabai -m window --toggle topmost;\
+                       yabai -m window --toggle pip
+
+
+# s: Size of windows -----
+:: yabaimode_size : hs -c "hs.alert.closeAll(); hs.alert.show(\"\
+yabai-size mode\n\
+  h: extend to west\n\
+  l: extend to east\n\
+  j: extend to south\n\
+  k: extend to north\n\
+  S-h: shrink from west\n\
+  S-l: shrink from east\n\
+  S-j: shrink from south\n\
+  S-k: shrink from north\n\
+  b: balance sizes\n\
+  C-<KANA> OR CMD-<KANA>: back to yabai-home mode\n\
+  C-<EISU> OR CMD-<EISU>: back to yabai-off mode\",\
+100)"
+yabaimode < s ; yabaimode_size
+# yabaimode_size < ctrl - 0x1E ; default    # Go back to default mode. 0x1E is [ key on MBA (ja)
+# yabaimode_size < escape ; default    # Go back to default mode. 0x1E is [ key on MBA (ja)
+yabaimode_size < ctrl - 0x68 ; yabaimode  # Go back to yabai-home mode. 0x68 is kana key on MBA (ja)
+yabaimode_size < cmd - 0x68 ; yabaimode  # Go back to yabai-home mode. 0x68 is kana key on MBA (ja)
+yabaimode_size < ctrl - 0x66 ; default  # Go back to default mode.
+yabaimode_size < cmd - 0x66 ; default  # Go back to default mode.
+
+## increase window to left:
+yabaimode_size < h : yabai -m window --resize left:-20:0
+## increase window to top:
+yabaimode_size < k : yabai -m window --resize top:0:-20
+## increase window to right:
+yabaimode_size < l : yabai -m window --resize right:20:0
+## increase window to down:
+yabaimode_size < j : yabai -m window --resize bottom:0:20
+
+## decrease window from left:
+yabaimode_size < shift -l : yabai -m window --resize left:20:0
+## decrease window from top:
+yabaimode_size < shift -j : yabai -m window --resize top:0:20
+## decrease window from right:
+yabaimode_size < shift -h : yabai -m window --resize right:-20:0
+## decrease window from down:
+yabaimode_size < shift -k : yabai -m window --resize bottom:0:-20
+
+yabaimode_size < b : yabai -m space --balance  # balance size of windows
+
+# space: Stacking
+:: yabaimode_stack : hs -c "hs.alert.closeAll(); hs.alert.show(\"\
+yabai-stack mode\n\
+  h: swallow stack from left\n\
+  l: swallow stack from right\n\
+  j: swallow stack from below\n\
+  k: swallow stack from above\n\
+  H OR <left>: jump onto stack on left\n\
+  L OR <right>: jump onto stack on right\n\
+  J OR <down>: jump onto stack on below\n\
+  K OR <up>: jump onto stack on above\n\
+  C-<KANA> OR CMD-<KANA>: back to yabai-home mode\n\
+  C-<EISU> OR CMD-<EISU>: back to yabai-off mode\",\
+100)"
+yabaimode < space ; yabaimode_stack
+# yabaimode_stack < ctrl - 0x1E ; default    # Go back to default mode. 0x1E is [ key on MBA (ja)
+# yabaimode_stack < escape ; default    # Go back to default mode. 0x1E is [ key on MBA (ja)
+yabaimode_stack < ctrl - 0x68 ; yabaimode  # Go back to yabai-home mode. 0x68 is kana key on MBA (ja)
+yabaimode_stack < cmd - 0x68 ; yabaimode  # Go back to yabai-home mode. 0x68 is kana key on MBA (ja)
+yabaimode_stack < ctrl - 0x66 ; default  # Go back to default mode.
+yabaimode_stack < cmd - 0x66 ; default  # Go back to default mode.
+
+# ## stack forward:
+# yabaimode_stack < f : yabai -m query --spaces --space \
+#   | jq -re ".index" \
+#   | xargs -I{} yabai -m query --windows --space {} \
+#   | jq -sre "add | map(select(.minimized != 1)) | sort_by(.display, .frame.y, .frame.x, .id) | reverse | nth(index(map(select(.focused == 1))) - 1).id" \
+#   | xargs -I{} yabai -m window --focus {}
+#
+# ## stack backward:
+# yabaimode_stack < b : yabai -m query --spaces --space \
+#   | jq -re ".index" \
+#   | xargs -I{} yabai -m query --windows --space {} \
+#   | jq -sre "add | map(select(.minimized != 1)) | sort_by(.display, .frame.y, .frame.y, .id) | nth(index(map(select(.focused == 1))) - 1).id" \
+#   | xargs -I{} yabai -m window --focus {}
+
+## stack target_window_sel onto below
+yabaimode_stack < j : yabai -m window --stack south
+## stack target_window_sel onto above
+yabaimode_stack < k : yabai -m window --stack north
+## stack target_window_sel onto right
+yabaimode_stack < l : yabai -m window --stack east
+## stack target_window_sel onto left
+yabaimode_stack < h : yabai -m window --stack west
+
+## Move a window to the stack on the right:
+yabaimode_stack < shift - l : yabai_pop_stack_right
+yabaimode_stack < right : yabai_pop_stack_right
+## Move a window to the stack on the left:
+yabaimode_stack < shift - h : yabai_pop_stack_left
+yabaimode_stack < left : yabai_pop_stack_left
+yabaimode_stack < shift - j : yabai_pop_stack_below
+yabaimode_stack < down : yabai_pop_stack_below
+yabaimode_stack < shift - k : yabai_pop_stack_above
+yabaimode_stack < up : yabai_pop_stack_above
+
+# ## stack target_window_sel onto source_window_sel
+# yabaimode_stack < a : yabai -m window [<source_window_sel>] --stack <target_window_sel>
+#
+# ## next window is inserted onto source_window_sel
+# yabaimode_stack < a : yabai -m window [<source_window_sel>] --insert stack
+
+
+# S: Managing yabai service -----
+:: yabaimode_service : hs -c "hs.alert.closeAll(); hs.alert.show(\"\
+yabai-service mode\n\
+  S: Start yabai\n\
+  Q: Stop yabai\n\
+  R: Restart yabai\n\
+  r: Reload yabai\n\
+  C-<KANA> OR CMD-<KANA>: back to yabai-home mode\n\
+  C-<EISU> OR CMD-<EISU>: back to yabai-off mode\",\
+100)"
+yabaimode < w ; yabaimode_service
+yabaimode < shift - s ; yabaimode_service
+# yabaimode_size < ctrl - 0x1E ; default    # Go back to default mode. 0x1E is [ key on MBA (ja)
+# yabaimode_size < escape ; default    # Go back to default mode. 0x1E is [ key on MBA (ja)
+yabaimode_service < ctrl - 0x68 ; yabaimode  # Go back to yabai-home mode. 0x68 is kana key on MBA (ja)
+yabaimode_service < cmd - 0x68 ; yabaimode  # Go back to yabai-home mode. 0x68 is kana key on MBA (ja)
+yabaimode_service < ctrl - 0x66 ; default  # Go back to default mode.
+yabaimode_service < cmd - 0x66 ; default  # Go back to default mode.
+
+# yabaimode_service < shift - s : brew services start xorpse/formulae/yabai && hs -c "hs.alert.show(\"Started yabai service.\")"
+yabaimode_service < shift - s : brew services start koekeishiya/formulae/yabai && hs -c "hs.alert.show(\"Started yabai service.\")"
+# yabaimode_service < shift - q : brew services stop xorpse/formulae/yabai && hs -c "hs.alert.show(\"Stopped yabai service.\")"
+yabaimode_service < shift - q : brew services stop koekeishiya/formulae/yabai && hs -c "hs.alert.show(\"Stopped yabai service.\")"
+# yabaimode_service < shift - r : brew services restart xorpse/formulae/yabai && hs -c "hs.alert.show(\"Restarted yabai service.\")"
+yabaimode_service < shift - r : brew services restart koekeishiya/formulae/yabai && hs -c "hs.alert.show(\"Restarted yabai service.\")"
+# yabaimode_service < r : brew services reload xorpse/formulae/yabai && hs -c "hs.alert.show(\"Reloaded yabai service.\")"
+yabaimode_service < r : brew services reload koekeishiya/formulae/yabai && hs -c "hs.alert.show(\"Reloaded yabai service.\")"
+
+
+# f: Displays -----
+:: yabaimode_display : hs -c "hs.alert.closeAll(); hs.alert.show(\"\
+yabai-display mode\n\
+  j: move to next display\n\
+  k: move to prev display\",\
+100)"
+yabaimode < d ; yabaimode_display
+yabaimode_display < ctrl - 0x68 ; yabaimode  # Go back to yabai-home mode. 0x68 is kana key on MBA (ja).
+yabaimode_display < cmd - 0x68 ; yabaimode  # Go back to yabai-home mode. 0x68 is kana key on MBA (ja).
+yabaimode_display < ctrl - 0x66 ; default  # Go back to default mode. 0x66 is eisu key on MBA (ja).
+yabaimode_display < cmd - 0x66 ; default  # Go back to default mode. 0x66 is eisu key on MBA (ja).
+
+# Move the current window to the next display and maintain the focus on the window:
+yabaimode_display < n  : yabai -m window --display next; yabai -m display --focus next
+# Move the current window to the prev display and maintain the focus on the window:
+yabaimode_display < p  : yabai -m window --display prev; yabai -m display --focus prev
+
+
+# Disabling unbound keys =====
+yabaimode < 0x0 ; yabaimode
+yabaimode < 0x1 ; yabaimode
+yabaimode < 0x2 ; yabaimode
+yabaimode < 0x3 ; yabaimode
+yabaimode < 0x4 ; yabaimode
+yabaimode < 0x5 ; yabaimode
+yabaimode < 0x6 ; yabaimode
+yabaimode < 0x7 ; yabaimode
+yabaimode < 0x8 ; yabaimode
+yabaimode < 0x9 ; yabaimode
+yabaimode < 0xA ; yabaimode
+yabaimode < 0xB ; yabaimode
+yabaimode < 0xC ; yabaimode
+yabaimode < 0xD ; yabaimode
+yabaimode < 0xE ; yabaimode
+yabaimode < 0xF ; yabaimode
+yabaimode < 0x10; yabaimode
+yabaimode < 0x11; yabaimode
+yabaimode < 0x12; yabaimode
+yabaimode < 0x13; yabaimode
+yabaimode < 0x14; yabaimode
+yabaimode < 0x15; yabaimode
+yabaimode < 0x16; yabaimode
+yabaimode < 0x17; yabaimode
+yabaimode < 0x18; yabaimode
+yabaimode < 0x19; yabaimode
+yabaimode < 0x1A; yabaimode
+yabaimode < 0x1B; yabaimode
+yabaimode < 0x1C; yabaimode
+yabaimode < 0x1D; yabaimode
+yabaimode < 0x1E; yabaimode
+yabaimode < 0x1F; yabaimode
+yabaimode < 0x20; yabaimode
+yabaimode < 0x21; yabaimode
+yabaimode < 0x22; yabaimode
+yabaimode < 0x23; yabaimode
+yabaimode < 0x24; yabaimode
+yabaimode < 0x25; yabaimode
+yabaimode < 0x26; yabaimode
+yabaimode < 0x27; yabaimode
+yabaimode < 0x28; yabaimode
+yabaimode < 0x29; yabaimode
+yabaimode < 0x2A; yabaimode
+yabaimode < 0x2B; yabaimode
+yabaimode < 0x2C; yabaimode
+yabaimode < 0x2D; yabaimode
+yabaimode < 0x2E; yabaimode
+yabaimode < 0x2F; yabaimode
+yabaimode < 0x30; yabaimode
+yabaimode < 0x31; yabaimode
+yabaimode < 0x32; yabaimode
+yabaimode < 0x33; yabaimode
+yabaimode < 0x34; yabaimode
+yabaimode < 0x35; yabaimode
+yabaimode < 0x36; yabaimode
+yabaimode < 0x37; yabaimode
+yabaimode < 0x38; yabaimode
+yabaimode < 0x39; yabaimode
+yabaimode < 0x3A; yabaimode
+yabaimode < 0x3B; yabaimode
+yabaimode < 0x3C; yabaimode
+yabaimode < 0x3D; yabaimode
+yabaimode < 0x3E; yabaimode
+yabaimode < 0x3F; yabaimode
+yabaimode < 0x40; yabaimode
+yabaimode < 0x41; yabaimode
+yabaimode < 0x42; yabaimode
+yabaimode < 0x43; yabaimode
+yabaimode < 0x44; yabaimode
+yabaimode < 0x45; yabaimode
+yabaimode < 0x46; yabaimode
+yabaimode < 0x47; yabaimode
+yabaimode < 0x48; yabaimode
+yabaimode < 0x49; yabaimode
+yabaimode < 0x4A; yabaimode
+yabaimode < 0x4B; yabaimode
+yabaimode < 0x4C; yabaimode
+yabaimode < 0x4D; yabaimode
+yabaimode < 0x4E; yabaimode
+yabaimode < 0x4F; yabaimode
+yabaimode < 0x50; yabaimode
+yabaimode < 0x51; yabaimode
+yabaimode < 0x52; yabaimode
+yabaimode < 0x53; yabaimode
+yabaimode < 0x54; yabaimode
+yabaimode < 0x55; yabaimode
+yabaimode < 0x56; yabaimode
+yabaimode < 0x57; yabaimode
+yabaimode < 0x58; yabaimode
+yabaimode < 0x59; yabaimode
+yabaimode < 0x5A; yabaimode
+yabaimode < 0x5B; yabaimode
+yabaimode < 0x5C; yabaimode
+yabaimode < 0x5D; yabaimode
+yabaimode < 0x5E; yabaimode
+yabaimode < 0x5F; yabaimode
+yabaimode < 0x60; yabaimode
+yabaimode < 0x61; yabaimode
+yabaimode < 0x62; yabaimode
+yabaimode < 0x63; yabaimode
+yabaimode < 0x64; yabaimode
+yabaimode < 0x65; yabaimode
+yabaimode < 0x66; yabaimode
+yabaimode < 0x67; yabaimode
+yabaimode < 0x68; yabaimode
+yabaimode < 0x69; yabaimode
+
+yabaimode < shift - 0x0 ; yabaimode
+yabaimode < shift - 0x1 ; yabaimode
+yabaimode < shift - 0x2 ; yabaimode
+yabaimode < shift - 0x3 ; yabaimode
+yabaimode < shift - 0x4 ; yabaimode
+yabaimode < shift - 0x5 ; yabaimode
+yabaimode < shift - 0x6 ; yabaimode
+yabaimode < shift - 0x7 ; yabaimode
+yabaimode < shift - 0x8 ; yabaimode
+yabaimode < shift - 0x9 ; yabaimode
+yabaimode < shift - 0xA ; yabaimode
+yabaimode < shift - 0xB ; yabaimode
+yabaimode < shift - 0xC ; yabaimode
+yabaimode < shift - 0xD ; yabaimode
+yabaimode < shift - 0xE ; yabaimode
+yabaimode < shift - 0xF ; yabaimode
+yabaimode < shift - 0x10; yabaimode
+yabaimode < shift - 0x11; yabaimode
+yabaimode < shift - 0x12; yabaimode
+yabaimode < shift - 0x13; yabaimode
+yabaimode < shift - 0x14; yabaimode
+yabaimode < shift - 0x15; yabaimode
+yabaimode < shift - 0x16; yabaimode
+yabaimode < shift - 0x17; yabaimode
+yabaimode < shift - 0x18; yabaimode
+yabaimode < shift - 0x19; yabaimode
+yabaimode < shift - 0x1A; yabaimode
+yabaimode < shift - 0x1B; yabaimode
+yabaimode < shift - 0x1C; yabaimode
+yabaimode < shift - 0x1D; yabaimode
+yabaimode < shift - 0x1E; yabaimode
+yabaimode < shift - 0x1F; yabaimode
+yabaimode < shift - 0x20; yabaimode
+yabaimode < shift - 0x21; yabaimode
+yabaimode < shift - 0x22; yabaimode
+yabaimode < shift - 0x23; yabaimode
+yabaimode < shift - 0x24; yabaimode
+yabaimode < shift - 0x25; yabaimode
+yabaimode < shift - 0x26; yabaimode
+yabaimode < shift - 0x27; yabaimode
+yabaimode < shift - 0x28; yabaimode
+yabaimode < shift - 0x29; yabaimode
+yabaimode < shift - 0x2A; yabaimode
+yabaimode < shift - 0x2B; yabaimode
+yabaimode < shift - 0x2C; yabaimode
+yabaimode < shift - 0x2D; yabaimode
+yabaimode < shift - 0x2E; yabaimode
+yabaimode < shift - 0x2F; yabaimode
+yabaimode < shift - 0x30; yabaimode
+yabaimode < shift - 0x31; yabaimode
+yabaimode < shift - 0x32; yabaimode
+yabaimode < shift - 0x33; yabaimode
+yabaimode < shift - 0x34; yabaimode
+yabaimode < shift - 0x35; yabaimode
+yabaimode < shift - 0x36; yabaimode
+yabaimode < shift - 0x37; yabaimode
+yabaimode < shift - 0x38; yabaimode
+yabaimode < shift - 0x39; yabaimode
+yabaimode < shift - 0x3A; yabaimode
+yabaimode < shift - 0x3B; yabaimode
+yabaimode < shift - 0x3C; yabaimode
+yabaimode < shift - 0x3D; yabaimode
+yabaimode < shift - 0x3E; yabaimode
+yabaimode < shift - 0x3F; yabaimode
+yabaimode < shift - 0x40; yabaimode
+yabaimode < shift - 0x41; yabaimode
+yabaimode < shift - 0x42; yabaimode
+yabaimode < shift - 0x43; yabaimode
+yabaimode < shift - 0x44; yabaimode
+yabaimode < shift - 0x45; yabaimode
+yabaimode < shift - 0x46; yabaimode
+yabaimode < shift - 0x47; yabaimode
+yabaimode < shift - 0x48; yabaimode
+yabaimode < shift - 0x49; yabaimode
+yabaimode < shift - 0x4A; yabaimode
+yabaimode < shift - 0x4B; yabaimode
+yabaimode < shift - 0x4C; yabaimode
+yabaimode < shift - 0x4D; yabaimode
+yabaimode < shift - 0x4E; yabaimode
+yabaimode < shift - 0x4F; yabaimode
+yabaimode < shift - 0x50; yabaimode
+yabaimode < shift - 0x51; yabaimode
+yabaimode < shift - 0x52; yabaimode
+yabaimode < shift - 0x53; yabaimode
+yabaimode < shift - 0x54; yabaimode
+yabaimode < shift - 0x55; yabaimode
+yabaimode < shift - 0x56; yabaimode
+yabaimode < shift - 0x57; yabaimode
+yabaimode < shift - 0x58; yabaimode
+yabaimode < shift - 0x59; yabaimode
+yabaimode < shift - 0x5A; yabaimode
+yabaimode < shift - 0x5B; yabaimode
+yabaimode < shift - 0x5C; yabaimode
+yabaimode < shift - 0x5D; yabaimode
+yabaimode < shift - 0x5E; yabaimode
+yabaimode < shift - 0x5F; yabaimode
+yabaimode < shift - 0x60; yabaimode
+yabaimode < shift - 0x61; yabaimode
+yabaimode < shift - 0x62; yabaimode
+yabaimode < shift - 0x63; yabaimode
+yabaimode < shift - 0x64; yabaimode
+yabaimode < shift - 0x65; yabaimode
+# yabaimode < shift - 0x66; yabaimode
+yabaimode < shift - 0x67; yabaimode
+# yabaimode < shift - 0x68; yabaimode
+yabaimode < shift - 0x69; yabaimode
+
+yabaimode_focus < 0x0 ; yabaimode_focus
+yabaimode_focus < 0x1 ; yabaimode_focus
+yabaimode_focus < 0x2 ; yabaimode_focus
+yabaimode_focus < 0x3 ; yabaimode_focus
+yabaimode_focus < 0x4 ; yabaimode_focus
+yabaimode_focus < 0x5 ; yabaimode_focus
+yabaimode_focus < 0x6 ; yabaimode_focus
+yabaimode_focus < 0x7 ; yabaimode_focus
+yabaimode_focus < 0x8 ; yabaimode_focus
+yabaimode_focus < 0x9 ; yabaimode_focus
+yabaimode_focus < 0xA ; yabaimode_focus
+yabaimode_focus < 0xB ; yabaimode_focus
+yabaimode_focus < 0xC ; yabaimode_focus
+yabaimode_focus < 0xD ; yabaimode_focus
+yabaimode_focus < 0xE ; yabaimode_focus
+yabaimode_focus < 0xF ; yabaimode_focus
+yabaimode_focus < 0x10; yabaimode_focus
+yabaimode_focus < 0x11; yabaimode_focus
+yabaimode_focus < 0x12; yabaimode_focus
+yabaimode_focus < 0x13; yabaimode_focus
+yabaimode_focus < 0x14; yabaimode_focus
+yabaimode_focus < 0x15; yabaimode_focus
+yabaimode_focus < 0x16; yabaimode_focus
+yabaimode_focus < 0x17; yabaimode_focus
+yabaimode_focus < 0x18; yabaimode_focus
+yabaimode_focus < 0x19; yabaimode_focus
+yabaimode_focus < 0x1A; yabaimode_focus
+yabaimode_focus < 0x1B; yabaimode_focus
+yabaimode_focus < 0x1C; yabaimode_focus
+yabaimode_focus < 0x1D; yabaimode_focus
+yabaimode_focus < 0x1E; yabaimode_focus
+yabaimode_focus < 0x1F; yabaimode_focus
+yabaimode_focus < 0x20; yabaimode_focus
+yabaimode_focus < 0x21; yabaimode_focus
+yabaimode_focus < 0x22; yabaimode_focus
+yabaimode_focus < 0x23; yabaimode_focus
+yabaimode_focus < 0x24; yabaimode_focus
+yabaimode_focus < 0x25; yabaimode_focus
+yabaimode_focus < 0x26; yabaimode_focus
+yabaimode_focus < 0x27; yabaimode_focus
+yabaimode_focus < 0x28; yabaimode_focus
+yabaimode_focus < 0x29; yabaimode_focus
+yabaimode_focus < 0x2A; yabaimode_focus
+yabaimode_focus < 0x2B; yabaimode_focus
+yabaimode_focus < 0x2C; yabaimode_focus
+yabaimode_focus < 0x2D; yabaimode_focus
+yabaimode_focus < 0x2E; yabaimode_focus
+yabaimode_focus < 0x2F; yabaimode_focus
+yabaimode_focus < 0x30; yabaimode_focus
+yabaimode_focus < 0x31; yabaimode_focus
+yabaimode_focus < 0x32; yabaimode_focus
+yabaimode_focus < 0x33; yabaimode_focus
+yabaimode_focus < 0x34; yabaimode_focus
+yabaimode_focus < 0x35; yabaimode_focus
+yabaimode_focus < 0x36; yabaimode_focus
+yabaimode_focus < 0x37; yabaimode_focus
+yabaimode_focus < 0x38; yabaimode_focus
+yabaimode_focus < 0x39; yabaimode_focus
+yabaimode_focus < 0x3A; yabaimode_focus
+yabaimode_focus < 0x3B; yabaimode_focus
+yabaimode_focus < 0x3C; yabaimode_focus
+yabaimode_focus < 0x3D; yabaimode_focus
+yabaimode_focus < 0x3E; yabaimode_focus
+yabaimode_focus < 0x3F; yabaimode_focus
+yabaimode_focus < 0x40; yabaimode_focus
+yabaimode_focus < 0x41; yabaimode_focus
+yabaimode_focus < 0x42; yabaimode_focus
+yabaimode_focus < 0x43; yabaimode_focus
+yabaimode_focus < 0x44; yabaimode_focus
+yabaimode_focus < 0x45; yabaimode_focus
+yabaimode_focus < 0x46; yabaimode_focus
+yabaimode_focus < 0x47; yabaimode_focus
+yabaimode_focus < 0x48; yabaimode_focus
+yabaimode_focus < 0x49; yabaimode_focus
+yabaimode_focus < 0x4A; yabaimode_focus
+yabaimode_focus < 0x4B; yabaimode_focus
+yabaimode_focus < 0x4C; yabaimode_focus
+yabaimode_focus < 0x4D; yabaimode_focus
+yabaimode_focus < 0x4E; yabaimode_focus
+yabaimode_focus < 0x4F; yabaimode_focus
+yabaimode_focus < 0x50; yabaimode_focus
+yabaimode_focus < 0x51; yabaimode_focus
+yabaimode_focus < 0x52; yabaimode_focus
+yabaimode_focus < 0x53; yabaimode_focus
+yabaimode_focus < 0x54; yabaimode_focus
+yabaimode_focus < 0x55; yabaimode_focus
+yabaimode_focus < 0x56; yabaimode_focus
+yabaimode_focus < 0x57; yabaimode_focus
+yabaimode_focus < 0x58; yabaimode_focus
+yabaimode_focus < 0x59; yabaimode_focus
+yabaimode_focus < 0x5A; yabaimode_focus
+yabaimode_focus < 0x5B; yabaimode_focus
+yabaimode_focus < 0x5C; yabaimode_focus
+yabaimode_focus < 0x5D; yabaimode_focus
+yabaimode_focus < 0x5E; yabaimode_focus
+yabaimode_focus < 0x5F; yabaimode_focus
+yabaimode_focus < 0x60; yabaimode_focus
+yabaimode_focus < 0x61; yabaimode_focus
+yabaimode_focus < 0x62; yabaimode_focus
+yabaimode_focus < 0x63; yabaimode_focus
+yabaimode_focus < 0x64; yabaimode_focus
+yabaimode_focus < 0x65; yabaimode_focus
+yabaimode_focus < 0x66; yabaimode_focus
+yabaimode_focus < 0x67; yabaimode_focus
+yabaimode_focus < 0x68; yabaimode_focus
+yabaimode_focus < 0x69; yabaimode_focus
+
+yabaimode_focus < shift - 0x0 ; yabaimode_focus
+yabaimode_focus < shift - 0x1 ; yabaimode_focus
+yabaimode_focus < shift - 0x2 ; yabaimode_focus
+yabaimode_focus < shift - 0x3 ; yabaimode_focus
+yabaimode_focus < shift - 0x4 ; yabaimode_focus
+yabaimode_focus < shift - 0x5 ; yabaimode_focus
+yabaimode_focus < shift - 0x6 ; yabaimode_focus
+yabaimode_focus < shift - 0x7 ; yabaimode_focus
+yabaimode_focus < shift - 0x8 ; yabaimode_focus
+yabaimode_focus < shift - 0x9 ; yabaimode_focus
+yabaimode_focus < shift - 0xA ; yabaimode_focus
+yabaimode_focus < shift - 0xB ; yabaimode_focus
+yabaimode_focus < shift - 0xC ; yabaimode_focus
+yabaimode_focus < shift - 0xD ; yabaimode_focus
+yabaimode_focus < shift - 0xE ; yabaimode_focus
+yabaimode_focus < shift - 0xF ; yabaimode_focus
+yabaimode_focus < shift - 0x10; yabaimode_focus
+yabaimode_focus < shift - 0x11; yabaimode_focus
+yabaimode_focus < shift - 0x12; yabaimode_focus
+yabaimode_focus < shift - 0x13; yabaimode_focus
+yabaimode_focus < shift - 0x14; yabaimode_focus
+yabaimode_focus < shift - 0x15; yabaimode_focus
+yabaimode_focus < shift - 0x16; yabaimode_focus
+yabaimode_focus < shift - 0x17; yabaimode_focus
+yabaimode_focus < shift - 0x18; yabaimode_focus
+yabaimode_focus < shift - 0x19; yabaimode_focus
+yabaimode_focus < shift - 0x1A; yabaimode_focus
+yabaimode_focus < shift - 0x1B; yabaimode_focus
+yabaimode_focus < shift - 0x1C; yabaimode_focus
+yabaimode_focus < shift - 0x1D; yabaimode_focus
+yabaimode_focus < shift - 0x1E; yabaimode_focus
+yabaimode_focus < shift - 0x1F; yabaimode_focus
+yabaimode_focus < shift - 0x20; yabaimode_focus
+yabaimode_focus < shift - 0x21; yabaimode_focus
+yabaimode_focus < shift - 0x22; yabaimode_focus
+yabaimode_focus < shift - 0x23; yabaimode_focus
+yabaimode_focus < shift - 0x24; yabaimode_focus
+yabaimode_focus < shift - 0x25; yabaimode_focus
+yabaimode_focus < shift - 0x26; yabaimode_focus
+yabaimode_focus < shift - 0x27; yabaimode_focus
+yabaimode_focus < shift - 0x28; yabaimode_focus
+yabaimode_focus < shift - 0x29; yabaimode_focus
+yabaimode_focus < shift - 0x2A; yabaimode_focus
+yabaimode_focus < shift - 0x2B; yabaimode_focus
+yabaimode_focus < shift - 0x2C; yabaimode_focus
+yabaimode_focus < shift - 0x2D; yabaimode_focus
+yabaimode_focus < shift - 0x2E; yabaimode_focus
+yabaimode_focus < shift - 0x2F; yabaimode_focus
+yabaimode_focus < shift - 0x30; yabaimode_focus
+yabaimode_focus < shift - 0x31; yabaimode_focus
+yabaimode_focus < shift - 0x32; yabaimode_focus
+yabaimode_focus < shift - 0x33; yabaimode_focus
+yabaimode_focus < shift - 0x34; yabaimode_focus
+yabaimode_focus < shift - 0x35; yabaimode_focus
+yabaimode_focus < shift - 0x36; yabaimode_focus
+yabaimode_focus < shift - 0x37; yabaimode_focus
+yabaimode_focus < shift - 0x38; yabaimode_focus
+yabaimode_focus < shift - 0x39; yabaimode_focus
+yabaimode_focus < shift - 0x3A; yabaimode_focus
+yabaimode_focus < shift - 0x3B; yabaimode_focus
+yabaimode_focus < shift - 0x3C; yabaimode_focus
+yabaimode_focus < shift - 0x3D; yabaimode_focus
+yabaimode_focus < shift - 0x3E; yabaimode_focus
+yabaimode_focus < shift - 0x3F; yabaimode_focus
+yabaimode_focus < shift - 0x40; yabaimode_focus
+yabaimode_focus < shift - 0x41; yabaimode_focus
+yabaimode_focus < shift - 0x42; yabaimode_focus
+yabaimode_focus < shift - 0x43; yabaimode_focus
+yabaimode_focus < shift - 0x44; yabaimode_focus
+yabaimode_focus < shift - 0x45; yabaimode_focus
+yabaimode_focus < shift - 0x46; yabaimode_focus
+yabaimode_focus < shift - 0x47; yabaimode_focus
+yabaimode_focus < shift - 0x48; yabaimode_focus
+yabaimode_focus < shift - 0x49; yabaimode_focus
+yabaimode_focus < shift - 0x4A; yabaimode_focus
+yabaimode_focus < shift - 0x4B; yabaimode_focus
+yabaimode_focus < shift - 0x4C; yabaimode_focus
+yabaimode_focus < shift - 0x4D; yabaimode_focus
+yabaimode_focus < shift - 0x4E; yabaimode_focus
+yabaimode_focus < shift - 0x4F; yabaimode_focus
+yabaimode_focus < shift - 0x50; yabaimode_focus
+yabaimode_focus < shift - 0x51; yabaimode_focus
+yabaimode_focus < shift - 0x52; yabaimode_focus
+yabaimode_focus < shift - 0x53; yabaimode_focus
+yabaimode_focus < shift - 0x54; yabaimode_focus
+yabaimode_focus < shift - 0x55; yabaimode_focus
+yabaimode_focus < shift - 0x56; yabaimode_focus
+yabaimode_focus < shift - 0x57; yabaimode_focus
+yabaimode_focus < shift - 0x58; yabaimode_focus
+yabaimode_focus < shift - 0x59; yabaimode_focus
+yabaimode_focus < shift - 0x5A; yabaimode_focus
+yabaimode_focus < shift - 0x5B; yabaimode_focus
+yabaimode_focus < shift - 0x5C; yabaimode_focus
+yabaimode_focus < shift - 0x5D; yabaimode_focus
+yabaimode_focus < shift - 0x5E; yabaimode_focus
+yabaimode_focus < shift - 0x5F; yabaimode_focus
+yabaimode_focus < shift - 0x60; yabaimode_focus
+yabaimode_focus < shift - 0x61; yabaimode_focus
+yabaimode_focus < shift - 0x62; yabaimode_focus
+yabaimode_focus < shift - 0x63; yabaimode_focus
+yabaimode_focus < shift - 0x64; yabaimode_focus
+yabaimode_focus < shift - 0x65; yabaimode_focus
+# yabaimode_focus < shift - 0x66; yabaimode_focus
+yabaimode_focus < shift - 0x67; yabaimode_focus
+# yabaimode_focus < shift - 0x68; yabaimode_focus
+yabaimode_focus < shift - 0x69; yabaimode_focus
+
+yabaimode_move < 0x0 ; yabaimode_move
+yabaimode_move < 0x1 ; yabaimode_move
+yabaimode_move < 0x2 ; yabaimode_move
+yabaimode_move < 0x3 ; yabaimode_move
+yabaimode_move < 0x4 ; yabaimode_move
+yabaimode_move < 0x5 ; yabaimode_move
+yabaimode_move < 0x6 ; yabaimode_move
+yabaimode_move < 0x7 ; yabaimode_move
+yabaimode_move < 0x8 ; yabaimode_move
+yabaimode_move < 0x9 ; yabaimode_move
+yabaimode_move < 0xA ; yabaimode_move
+yabaimode_move < 0xB ; yabaimode_move
+yabaimode_move < 0xC ; yabaimode_move
+yabaimode_move < 0xD ; yabaimode_move
+yabaimode_move < 0xE ; yabaimode_move
+yabaimode_move < 0xF ; yabaimode_move
+yabaimode_move < 0x10; yabaimode_move
+yabaimode_move < 0x11; yabaimode_move
+yabaimode_move < 0x12; yabaimode_move
+yabaimode_move < 0x13; yabaimode_move
+yabaimode_move < 0x14; yabaimode_move
+yabaimode_move < 0x15; yabaimode_move
+yabaimode_move < 0x16; yabaimode_move
+yabaimode_move < 0x17; yabaimode_move
+yabaimode_move < 0x18; yabaimode_move
+yabaimode_move < 0x19; yabaimode_move
+yabaimode_move < 0x1A; yabaimode_move
+yabaimode_move < 0x1B; yabaimode_move
+yabaimode_move < 0x1C; yabaimode_move
+yabaimode_move < 0x1D; yabaimode_move
+yabaimode_move < 0x1E; yabaimode_move
+yabaimode_move < 0x1F; yabaimode_move
+yabaimode_move < 0x20; yabaimode_move
+yabaimode_move < 0x21; yabaimode_move
+yabaimode_move < 0x22; yabaimode_move
+yabaimode_move < 0x23; yabaimode_move
+yabaimode_move < 0x24; yabaimode_move
+yabaimode_move < 0x25; yabaimode_move
+yabaimode_move < 0x26; yabaimode_move
+yabaimode_move < 0x27; yabaimode_move
+yabaimode_move < 0x28; yabaimode_move
+yabaimode_move < 0x29; yabaimode_move
+yabaimode_move < 0x2A; yabaimode_move
+yabaimode_move < 0x2B; yabaimode_move
+yabaimode_move < 0x2C; yabaimode_move
+yabaimode_move < 0x2D; yabaimode_move
+yabaimode_move < 0x2E; yabaimode_move
+yabaimode_move < 0x2F; yabaimode_move
+yabaimode_move < 0x30; yabaimode_move
+yabaimode_move < 0x31; yabaimode_move
+yabaimode_move < 0x32; yabaimode_move
+yabaimode_move < 0x33; yabaimode_move
+yabaimode_move < 0x34; yabaimode_move
+yabaimode_move < 0x35; yabaimode_move
+yabaimode_move < 0x36; yabaimode_move
+yabaimode_move < 0x37; yabaimode_move
+yabaimode_move < 0x38; yabaimode_move
+yabaimode_move < 0x39; yabaimode_move
+yabaimode_move < 0x3A; yabaimode_move
+yabaimode_move < 0x3B; yabaimode_move
+yabaimode_move < 0x3C; yabaimode_move
+yabaimode_move < 0x3D; yabaimode_move
+yabaimode_move < 0x3E; yabaimode_move
+yabaimode_move < 0x3F; yabaimode_move
+yabaimode_move < 0x40; yabaimode_move
+yabaimode_move < 0x41; yabaimode_move
+yabaimode_move < 0x42; yabaimode_move
+yabaimode_move < 0x43; yabaimode_move
+yabaimode_move < 0x44; yabaimode_move
+yabaimode_move < 0x45; yabaimode_move
+yabaimode_move < 0x46; yabaimode_move
+yabaimode_move < 0x47; yabaimode_move
+yabaimode_move < 0x48; yabaimode_move
+yabaimode_move < 0x49; yabaimode_move
+yabaimode_move < 0x4A; yabaimode_move
+yabaimode_move < 0x4B; yabaimode_move
+yabaimode_move < 0x4C; yabaimode_move
+yabaimode_move < 0x4D; yabaimode_move
+yabaimode_move < 0x4E; yabaimode_move
+yabaimode_move < 0x4F; yabaimode_move
+yabaimode_move < 0x50; yabaimode_move
+yabaimode_move < 0x51; yabaimode_move
+yabaimode_move < 0x52; yabaimode_move
+yabaimode_move < 0x53; yabaimode_move
+yabaimode_move < 0x54; yabaimode_move
+yabaimode_move < 0x55; yabaimode_move
+yabaimode_move < 0x56; yabaimode_move
+yabaimode_move < 0x57; yabaimode_move
+yabaimode_move < 0x58; yabaimode_move
+yabaimode_move < 0x59; yabaimode_move
+yabaimode_move < 0x5A; yabaimode_move
+yabaimode_move < 0x5B; yabaimode_move
+yabaimode_move < 0x5C; yabaimode_move
+yabaimode_move < 0x5D; yabaimode_move
+yabaimode_move < 0x5E; yabaimode_move
+yabaimode_move < 0x5F; yabaimode_move
+yabaimode_move < 0x60; yabaimode_move
+yabaimode_move < 0x61; yabaimode_move
+yabaimode_move < 0x62; yabaimode_move
+yabaimode_move < 0x63; yabaimode_move
+yabaimode_move < 0x64; yabaimode_move
+yabaimode_move < 0x65; yabaimode_move
+yabaimode_move < 0x66; yabaimode_move
+yabaimode_move < 0x67; yabaimode_move
+yabaimode_move < 0x68; yabaimode_move
+yabaimode_move < 0x69; yabaimode_move
+
+yabaimode_move < shift - 0x0 ; yabaimode_move
+yabaimode_move < shift - 0x1 ; yabaimode_move
+yabaimode_move < shift - 0x2 ; yabaimode_move
+yabaimode_move < shift - 0x3 ; yabaimode_move
+yabaimode_move < shift - 0x4 ; yabaimode_move
+yabaimode_move < shift - 0x5 ; yabaimode_move
+yabaimode_move < shift - 0x6 ; yabaimode_move
+yabaimode_move < shift - 0x7 ; yabaimode_move
+yabaimode_move < shift - 0x8 ; yabaimode_move
+yabaimode_move < shift - 0x9 ; yabaimode_move
+yabaimode_move < shift - 0xA ; yabaimode_move
+yabaimode_move < shift - 0xB ; yabaimode_move
+yabaimode_move < shift - 0xC ; yabaimode_move
+yabaimode_move < shift - 0xD ; yabaimode_move
+yabaimode_move < shift - 0xE ; yabaimode_move
+yabaimode_move < shift - 0xF ; yabaimode_move
+yabaimode_move < shift - 0x10; yabaimode_move
+yabaimode_move < shift - 0x11; yabaimode_move
+yabaimode_move < shift - 0x12; yabaimode_move
+yabaimode_move < shift - 0x13; yabaimode_move
+yabaimode_move < shift - 0x14; yabaimode_move
+yabaimode_move < shift - 0x15; yabaimode_move
+yabaimode_move < shift - 0x16; yabaimode_move
+yabaimode_move < shift - 0x17; yabaimode_move
+yabaimode_move < shift - 0x18; yabaimode_move
+yabaimode_move < shift - 0x19; yabaimode_move
+yabaimode_move < shift - 0x1A; yabaimode_move
+yabaimode_move < shift - 0x1B; yabaimode_move
+yabaimode_move < shift - 0x1C; yabaimode_move
+yabaimode_move < shift - 0x1D; yabaimode_move
+yabaimode_move < shift - 0x1E; yabaimode_move
+yabaimode_move < shift - 0x1F; yabaimode_move
+yabaimode_move < shift - 0x20; yabaimode_move
+yabaimode_move < shift - 0x21; yabaimode_move
+yabaimode_move < shift - 0x22; yabaimode_move
+yabaimode_move < shift - 0x23; yabaimode_move
+yabaimode_move < shift - 0x24; yabaimode_move
+yabaimode_move < shift - 0x25; yabaimode_move
+yabaimode_move < shift - 0x26; yabaimode_move
+yabaimode_move < shift - 0x27; yabaimode_move
+yabaimode_move < shift - 0x28; yabaimode_move
+yabaimode_move < shift - 0x29; yabaimode_move
+yabaimode_move < shift - 0x2A; yabaimode_move
+yabaimode_move < shift - 0x2B; yabaimode_move
+yabaimode_move < shift - 0x2C; yabaimode_move
+yabaimode_move < shift - 0x2D; yabaimode_move
+yabaimode_move < shift - 0x2E; yabaimode_move
+yabaimode_move < shift - 0x2F; yabaimode_move
+yabaimode_move < shift - 0x30; yabaimode_move
+yabaimode_move < shift - 0x31; yabaimode_move
+yabaimode_move < shift - 0x32; yabaimode_move
+yabaimode_move < shift - 0x33; yabaimode_move
+yabaimode_move < shift - 0x34; yabaimode_move
+yabaimode_move < shift - 0x35; yabaimode_move
+yabaimode_move < shift - 0x36; yabaimode_move
+yabaimode_move < shift - 0x37; yabaimode_move
+yabaimode_move < shift - 0x38; yabaimode_move
+yabaimode_move < shift - 0x39; yabaimode_move
+yabaimode_move < shift - 0x3A; yabaimode_move
+yabaimode_move < shift - 0x3B; yabaimode_move
+yabaimode_move < shift - 0x3C; yabaimode_move
+yabaimode_move < shift - 0x3D; yabaimode_move
+yabaimode_move < shift - 0x3E; yabaimode_move
+yabaimode_move < shift - 0x3F; yabaimode_move
+yabaimode_move < shift - 0x40; yabaimode_move
+yabaimode_move < shift - 0x41; yabaimode_move
+yabaimode_move < shift - 0x42; yabaimode_move
+yabaimode_move < shift - 0x43; yabaimode_move
+yabaimode_move < shift - 0x44; yabaimode_move
+yabaimode_move < shift - 0x45; yabaimode_move
+yabaimode_move < shift - 0x46; yabaimode_move
+yabaimode_move < shift - 0x47; yabaimode_move
+yabaimode_move < shift - 0x48; yabaimode_move
+yabaimode_move < shift - 0x49; yabaimode_move
+yabaimode_move < shift - 0x4A; yabaimode_move
+yabaimode_move < shift - 0x4B; yabaimode_move
+yabaimode_move < shift - 0x4C; yabaimode_move
+yabaimode_move < shift - 0x4D; yabaimode_move
+yabaimode_move < shift - 0x4E; yabaimode_move
+yabaimode_move < shift - 0x4F; yabaimode_move
+yabaimode_move < shift - 0x50; yabaimode_move
+yabaimode_move < shift - 0x51; yabaimode_move
+yabaimode_move < shift - 0x52; yabaimode_move
+yabaimode_move < shift - 0x53; yabaimode_move
+yabaimode_move < shift - 0x54; yabaimode_move
+yabaimode_move < shift - 0x55; yabaimode_move
+yabaimode_move < shift - 0x56; yabaimode_move
+yabaimode_move < shift - 0x57; yabaimode_move
+yabaimode_move < shift - 0x58; yabaimode_move
+yabaimode_move < shift - 0x59; yabaimode_move
+yabaimode_move < shift - 0x5A; yabaimode_move
+yabaimode_move < shift - 0x5B; yabaimode_move
+yabaimode_move < shift - 0x5C; yabaimode_move
+yabaimode_move < shift - 0x5D; yabaimode_move
+yabaimode_move < shift - 0x5E; yabaimode_move
+yabaimode_move < shift - 0x5F; yabaimode_move
+yabaimode_move < shift - 0x60; yabaimode_move
+yabaimode_move < shift - 0x61; yabaimode_move
+yabaimode_move < shift - 0x62; yabaimode_move
+yabaimode_move < shift - 0x63; yabaimode_move
+yabaimode_move < shift - 0x64; yabaimode_move
+yabaimode_move < shift - 0x65; yabaimode_move
+# yabaimode_move < shift - 0x66; yabaimode_move
+yabaimode_move < shift - 0x67; yabaimode_move
+# yabaimode_move < shift - 0x68; yabaimode_move
+yabaimode_move < shift - 0x69; yabaimode_move
+
+yabaimode_layout < 0x0 ; yabaimode_layout
+yabaimode_layout < 0x1 ; yabaimode_layout
+yabaimode_layout < 0x2 ; yabaimode_layout
+yabaimode_layout < 0x3 ; yabaimode_layout
+yabaimode_layout < 0x4 ; yabaimode_layout
+yabaimode_layout < 0x5 ; yabaimode_layout
+yabaimode_layout < 0x6 ; yabaimode_layout
+yabaimode_layout < 0x7 ; yabaimode_layout
+yabaimode_layout < 0x8 ; yabaimode_layout
+yabaimode_layout < 0x9 ; yabaimode_layout
+yabaimode_layout < 0xA ; yabaimode_layout
+yabaimode_layout < 0xB ; yabaimode_layout
+yabaimode_layout < 0xC ; yabaimode_layout
+yabaimode_layout < 0xD ; yabaimode_layout
+yabaimode_layout < 0xE ; yabaimode_layout
+yabaimode_layout < 0xF ; yabaimode_layout
+yabaimode_layout < 0x10; yabaimode_layout
+yabaimode_layout < 0x11; yabaimode_layout
+yabaimode_layout < 0x12; yabaimode_layout
+yabaimode_layout < 0x13; yabaimode_layout
+yabaimode_layout < 0x14; yabaimode_layout
+yabaimode_layout < 0x15; yabaimode_layout
+yabaimode_layout < 0x16; yabaimode_layout
+yabaimode_layout < 0x17; yabaimode_layout
+yabaimode_layout < 0x18; yabaimode_layout
+yabaimode_layout < 0x19; yabaimode_layout
+yabaimode_layout < 0x1A; yabaimode_layout
+yabaimode_layout < 0x1B; yabaimode_layout
+yabaimode_layout < 0x1C; yabaimode_layout
+yabaimode_layout < 0x1D; yabaimode_layout
+yabaimode_layout < 0x1E; yabaimode_layout
+yabaimode_layout < 0x1F; yabaimode_layout
+yabaimode_layout < 0x20; yabaimode_layout
+yabaimode_layout < 0x21; yabaimode_layout
+yabaimode_layout < 0x22; yabaimode_layout
+yabaimode_layout < 0x23; yabaimode_layout
+yabaimode_layout < 0x24; yabaimode_layout
+yabaimode_layout < 0x25; yabaimode_layout
+yabaimode_layout < 0x26; yabaimode_layout
+yabaimode_layout < 0x27; yabaimode_layout
+yabaimode_layout < 0x28; yabaimode_layout
+yabaimode_layout < 0x29; yabaimode_layout
+yabaimode_layout < 0x2A; yabaimode_layout
+yabaimode_layout < 0x2B; yabaimode_layout
+yabaimode_layout < 0x2C; yabaimode_layout
+yabaimode_layout < 0x2D; yabaimode_layout
+yabaimode_layout < 0x2E; yabaimode_layout
+yabaimode_layout < 0x2F; yabaimode_layout
+yabaimode_layout < 0x30; yabaimode_layout
+yabaimode_layout < 0x31; yabaimode_layout
+yabaimode_layout < 0x32; yabaimode_layout
+yabaimode_layout < 0x33; yabaimode_layout
+yabaimode_layout < 0x34; yabaimode_layout
+yabaimode_layout < 0x35; yabaimode_layout
+yabaimode_layout < 0x36; yabaimode_layout
+yabaimode_layout < 0x37; yabaimode_layout
+yabaimode_layout < 0x38; yabaimode_layout
+yabaimode_layout < 0x39; yabaimode_layout
+yabaimode_layout < 0x3A; yabaimode_layout
+yabaimode_layout < 0x3B; yabaimode_layout
+yabaimode_layout < 0x3C; yabaimode_layout
+yabaimode_layout < 0x3D; yabaimode_layout
+yabaimode_layout < 0x3E; yabaimode_layout
+yabaimode_layout < 0x3F; yabaimode_layout
+yabaimode_layout < 0x40; yabaimode_layout
+yabaimode_layout < 0x41; yabaimode_layout
+yabaimode_layout < 0x42; yabaimode_layout
+yabaimode_layout < 0x43; yabaimode_layout
+yabaimode_layout < 0x44; yabaimode_layout
+yabaimode_layout < 0x45; yabaimode_layout
+yabaimode_layout < 0x46; yabaimode_layout
+yabaimode_layout < 0x47; yabaimode_layout
+yabaimode_layout < 0x48; yabaimode_layout
+yabaimode_layout < 0x49; yabaimode_layout
+yabaimode_layout < 0x4A; yabaimode_layout
+yabaimode_layout < 0x4B; yabaimode_layout
+yabaimode_layout < 0x4C; yabaimode_layout
+yabaimode_layout < 0x4D; yabaimode_layout
+yabaimode_layout < 0x4E; yabaimode_layout
+yabaimode_layout < 0x4F; yabaimode_layout
+yabaimode_layout < 0x50; yabaimode_layout
+yabaimode_layout < 0x51; yabaimode_layout
+yabaimode_layout < 0x52; yabaimode_layout
+yabaimode_layout < 0x53; yabaimode_layout
+yabaimode_layout < 0x54; yabaimode_layout
+yabaimode_layout < 0x55; yabaimode_layout
+yabaimode_layout < 0x56; yabaimode_layout
+yabaimode_layout < 0x57; yabaimode_layout
+yabaimode_layout < 0x58; yabaimode_layout
+yabaimode_layout < 0x59; yabaimode_layout
+yabaimode_layout < 0x5A; yabaimode_layout
+yabaimode_layout < 0x5B; yabaimode_layout
+yabaimode_layout < 0x5C; yabaimode_layout
+yabaimode_layout < 0x5D; yabaimode_layout
+yabaimode_layout < 0x5E; yabaimode_layout
+yabaimode_layout < 0x5F; yabaimode_layout
+yabaimode_layout < 0x60; yabaimode_layout
+yabaimode_layout < 0x61; yabaimode_layout
+yabaimode_layout < 0x62; yabaimode_layout
+yabaimode_layout < 0x63; yabaimode_layout
+yabaimode_layout < 0x64; yabaimode_layout
+yabaimode_layout < 0x65; yabaimode_layout
+yabaimode_layout < 0x66; yabaimode_layout
+yabaimode_layout < 0x67; yabaimode_layout
+yabaimode_layout < 0x68; yabaimode_layout
+yabaimode_layout < 0x69; yabaimode_layout
+
+yabaimode_layout < shift - 0x0 ; yabaimode_layout
+yabaimode_layout < shift - 0x1 ; yabaimode_layout
+yabaimode_layout < shift - 0x2 ; yabaimode_layout
+yabaimode_layout < shift - 0x3 ; yabaimode_layout
+yabaimode_layout < shift - 0x4 ; yabaimode_layout
+yabaimode_layout < shift - 0x5 ; yabaimode_layout
+yabaimode_layout < shift - 0x6 ; yabaimode_layout
+yabaimode_layout < shift - 0x7 ; yabaimode_layout
+yabaimode_layout < shift - 0x8 ; yabaimode_layout
+yabaimode_layout < shift - 0x9 ; yabaimode_layout
+yabaimode_layout < shift - 0xA ; yabaimode_layout
+yabaimode_layout < shift - 0xB ; yabaimode_layout
+yabaimode_layout < shift - 0xC ; yabaimode_layout
+yabaimode_layout < shift - 0xD ; yabaimode_layout
+yabaimode_layout < shift - 0xE ; yabaimode_layout
+yabaimode_layout < shift - 0xF ; yabaimode_layout
+yabaimode_layout < shift - 0x10; yabaimode_layout
+yabaimode_layout < shift - 0x11; yabaimode_layout
+yabaimode_layout < shift - 0x12; yabaimode_layout
+yabaimode_layout < shift - 0x13; yabaimode_layout
+yabaimode_layout < shift - 0x14; yabaimode_layout
+yabaimode_layout < shift - 0x15; yabaimode_layout
+yabaimode_layout < shift - 0x16; yabaimode_layout
+yabaimode_layout < shift - 0x17; yabaimode_layout
+yabaimode_layout < shift - 0x18; yabaimode_layout
+yabaimode_layout < shift - 0x19; yabaimode_layout
+yabaimode_layout < shift - 0x1A; yabaimode_layout
+yabaimode_layout < shift - 0x1B; yabaimode_layout
+yabaimode_layout < shift - 0x1C; yabaimode_layout
+yabaimode_layout < shift - 0x1D; yabaimode_layout
+yabaimode_layout < shift - 0x1E; yabaimode_layout
+yabaimode_layout < shift - 0x1F; yabaimode_layout
+yabaimode_layout < shift - 0x20; yabaimode_layout
+yabaimode_layout < shift - 0x21; yabaimode_layout
+yabaimode_layout < shift - 0x22; yabaimode_layout
+yabaimode_layout < shift - 0x23; yabaimode_layout
+yabaimode_layout < shift - 0x24; yabaimode_layout
+yabaimode_layout < shift - 0x25; yabaimode_layout
+yabaimode_layout < shift - 0x26; yabaimode_layout
+yabaimode_layout < shift - 0x27; yabaimode_layout
+yabaimode_layout < shift - 0x28; yabaimode_layout
+yabaimode_layout < shift - 0x29; yabaimode_layout
+yabaimode_layout < shift - 0x2A; yabaimode_layout
+yabaimode_layout < shift - 0x2B; yabaimode_layout
+yabaimode_layout < shift - 0x2C; yabaimode_layout
+yabaimode_layout < shift - 0x2D; yabaimode_layout
+yabaimode_layout < shift - 0x2E; yabaimode_layout
+yabaimode_layout < shift - 0x2F; yabaimode_layout
+yabaimode_layout < shift - 0x30; yabaimode_layout
+yabaimode_layout < shift - 0x31; yabaimode_layout
+yabaimode_layout < shift - 0x32; yabaimode_layout
+yabaimode_layout < shift - 0x33; yabaimode_layout
+yabaimode_layout < shift - 0x34; yabaimode_layout
+yabaimode_layout < shift - 0x35; yabaimode_layout
+yabaimode_layout < shift - 0x36; yabaimode_layout
+yabaimode_layout < shift - 0x37; yabaimode_layout
+yabaimode_layout < shift - 0x38; yabaimode_layout
+yabaimode_layout < shift - 0x39; yabaimode_layout
+yabaimode_layout < shift - 0x3A; yabaimode_layout
+yabaimode_layout < shift - 0x3B; yabaimode_layout
+yabaimode_layout < shift - 0x3C; yabaimode_layout
+yabaimode_layout < shift - 0x3D; yabaimode_layout
+yabaimode_layout < shift - 0x3E; yabaimode_layout
+yabaimode_layout < shift - 0x3F; yabaimode_layout
+yabaimode_layout < shift - 0x40; yabaimode_layout
+yabaimode_layout < shift - 0x41; yabaimode_layout
+yabaimode_layout < shift - 0x42; yabaimode_layout
+yabaimode_layout < shift - 0x43; yabaimode_layout
+yabaimode_layout < shift - 0x44; yabaimode_layout
+yabaimode_layout < shift - 0x45; yabaimode_layout
+yabaimode_layout < shift - 0x46; yabaimode_layout
+yabaimode_layout < shift - 0x47; yabaimode_layout
+yabaimode_layout < shift - 0x48; yabaimode_layout
+yabaimode_layout < shift - 0x49; yabaimode_layout
+yabaimode_layout < shift - 0x4A; yabaimode_layout
+yabaimode_layout < shift - 0x4B; yabaimode_layout
+yabaimode_layout < shift - 0x4C; yabaimode_layout
+yabaimode_layout < shift - 0x4D; yabaimode_layout
+yabaimode_layout < shift - 0x4E; yabaimode_layout
+yabaimode_layout < shift - 0x4F; yabaimode_layout
+yabaimode_layout < shift - 0x50; yabaimode_layout
+yabaimode_layout < shift - 0x51; yabaimode_layout
+yabaimode_layout < shift - 0x52; yabaimode_layout
+yabaimode_layout < shift - 0x53; yabaimode_layout
+yabaimode_layout < shift - 0x54; yabaimode_layout
+yabaimode_layout < shift - 0x55; yabaimode_layout
+yabaimode_layout < shift - 0x56; yabaimode_layout
+yabaimode_layout < shift - 0x57; yabaimode_layout
+yabaimode_layout < shift - 0x58; yabaimode_layout
+yabaimode_layout < shift - 0x59; yabaimode_layout
+yabaimode_layout < shift - 0x5A; yabaimode_layout
+yabaimode_layout < shift - 0x5B; yabaimode_layout
+yabaimode_layout < shift - 0x5C; yabaimode_layout
+yabaimode_layout < shift - 0x5D; yabaimode_layout
+yabaimode_layout < shift - 0x5E; yabaimode_layout
+yabaimode_layout < shift - 0x5F; yabaimode_layout
+yabaimode_layout < shift - 0x60; yabaimode_layout
+yabaimode_layout < shift - 0x61; yabaimode_layout
+yabaimode_layout < shift - 0x62; yabaimode_layout
+yabaimode_layout < shift - 0x63; yabaimode_layout
+yabaimode_layout < shift - 0x64; yabaimode_layout
+yabaimode_layout < shift - 0x65; yabaimode_layout
+# yabaimode_layout < shift - 0x66; yabaimode_layout
+yabaimode_layout < shift - 0x67; yabaimode_layout
+# yabaimode_layout < shift - 0x68; yabaimode_layout
+yabaimode_layout < shift - 0x69; yabaimode_layout
+
+yabaimode_stack < 0x0 ; yabaimode_stack
+yabaimode_stack < 0x1 ; yabaimode_stack
+yabaimode_stack < 0x2 ; yabaimode_stack
+yabaimode_stack < 0x3 ; yabaimode_stack
+yabaimode_stack < 0x4 ; yabaimode_stack
+yabaimode_stack < 0x5 ; yabaimode_stack
+yabaimode_stack < 0x6 ; yabaimode_stack
+yabaimode_stack < 0x7 ; yabaimode_stack
+yabaimode_stack < 0x8 ; yabaimode_stack
+yabaimode_stack < 0x9 ; yabaimode_stack
+yabaimode_stack < 0xA ; yabaimode_stack
+yabaimode_stack < 0xB ; yabaimode_stack
+yabaimode_stack < 0xC ; yabaimode_stack
+yabaimode_stack < 0xD ; yabaimode_stack
+yabaimode_stack < 0xE ; yabaimode_stack
+yabaimode_stack < 0xF ; yabaimode_stack
+yabaimode_stack < 0x10; yabaimode_stack
+yabaimode_stack < 0x11; yabaimode_stack
+yabaimode_stack < 0x12; yabaimode_stack
+yabaimode_stack < 0x13; yabaimode_stack
+yabaimode_stack < 0x14; yabaimode_stack
+yabaimode_stack < 0x15; yabaimode_stack
+yabaimode_stack < 0x16; yabaimode_stack
+yabaimode_stack < 0x17; yabaimode_stack
+yabaimode_stack < 0x18; yabaimode_stack
+yabaimode_stack < 0x19; yabaimode_stack
+yabaimode_stack < 0x1A; yabaimode_stack
+yabaimode_stack < 0x1B; yabaimode_stack
+yabaimode_stack < 0x1C; yabaimode_stack
+yabaimode_stack < 0x1D; yabaimode_stack
+yabaimode_stack < 0x1E; yabaimode_stack
+yabaimode_stack < 0x1F; yabaimode_stack
+yabaimode_stack < 0x20; yabaimode_stack
+yabaimode_stack < 0x21; yabaimode_stack
+yabaimode_stack < 0x22; yabaimode_stack
+yabaimode_stack < 0x23; yabaimode_stack
+yabaimode_stack < 0x24; yabaimode_stack
+yabaimode_stack < 0x25; yabaimode_stack
+yabaimode_stack < 0x26; yabaimode_stack
+yabaimode_stack < 0x27; yabaimode_stack
+yabaimode_stack < 0x28; yabaimode_stack
+yabaimode_stack < 0x29; yabaimode_stack
+yabaimode_stack < 0x2A; yabaimode_stack
+yabaimode_stack < 0x2B; yabaimode_stack
+yabaimode_stack < 0x2C; yabaimode_stack
+yabaimode_stack < 0x2D; yabaimode_stack
+yabaimode_stack < 0x2E; yabaimode_stack
+yabaimode_stack < 0x2F; yabaimode_stack
+yabaimode_stack < 0x30; yabaimode_stack
+yabaimode_stack < 0x31; yabaimode_stack
+yabaimode_stack < 0x32; yabaimode_stack
+yabaimode_stack < 0x33; yabaimode_stack
+yabaimode_stack < 0x34; yabaimode_stack
+yabaimode_stack < 0x35; yabaimode_stack
+yabaimode_stack < 0x36; yabaimode_stack
+yabaimode_stack < 0x37; yabaimode_stack
+yabaimode_stack < 0x38; yabaimode_stack
+yabaimode_stack < 0x39; yabaimode_stack
+yabaimode_stack < 0x3A; yabaimode_stack
+yabaimode_stack < 0x3B; yabaimode_stack
+yabaimode_stack < 0x3C; yabaimode_stack
+yabaimode_stack < 0x3D; yabaimode_stack
+yabaimode_stack < 0x3E; yabaimode_stack
+yabaimode_stack < 0x3F; yabaimode_stack
+yabaimode_stack < 0x40; yabaimode_stack
+yabaimode_stack < 0x41; yabaimode_stack
+yabaimode_stack < 0x42; yabaimode_stack
+yabaimode_stack < 0x43; yabaimode_stack
+yabaimode_stack < 0x44; yabaimode_stack
+yabaimode_stack < 0x45; yabaimode_stack
+yabaimode_stack < 0x46; yabaimode_stack
+yabaimode_stack < 0x47; yabaimode_stack
+yabaimode_stack < 0x48; yabaimode_stack
+yabaimode_stack < 0x49; yabaimode_stack
+yabaimode_stack < 0x4A; yabaimode_stack
+yabaimode_stack < 0x4B; yabaimode_stack
+yabaimode_stack < 0x4C; yabaimode_stack
+yabaimode_stack < 0x4D; yabaimode_stack
+yabaimode_stack < 0x4E; yabaimode_stack
+yabaimode_stack < 0x4F; yabaimode_stack
+yabaimode_stack < 0x50; yabaimode_stack
+yabaimode_stack < 0x51; yabaimode_stack
+yabaimode_stack < 0x52; yabaimode_stack
+yabaimode_stack < 0x53; yabaimode_stack
+yabaimode_stack < 0x54; yabaimode_stack
+yabaimode_stack < 0x55; yabaimode_stack
+yabaimode_stack < 0x56; yabaimode_stack
+yabaimode_stack < 0x57; yabaimode_stack
+yabaimode_stack < 0x58; yabaimode_stack
+yabaimode_stack < 0x59; yabaimode_stack
+yabaimode_stack < 0x5A; yabaimode_stack
+yabaimode_stack < 0x5B; yabaimode_stack
+yabaimode_stack < 0x5C; yabaimode_stack
+yabaimode_stack < 0x5D; yabaimode_stack
+yabaimode_stack < 0x5E; yabaimode_stack
+yabaimode_stack < 0x5F; yabaimode_stack
+yabaimode_stack < 0x60; yabaimode_stack
+yabaimode_stack < 0x61; yabaimode_stack
+yabaimode_stack < 0x62; yabaimode_stack
+yabaimode_stack < 0x63; yabaimode_stack
+yabaimode_stack < 0x64; yabaimode_stack
+yabaimode_stack < 0x65; yabaimode_stack
+yabaimode_stack < 0x66; yabaimode_stack
+yabaimode_stack < 0x67; yabaimode_stack
+yabaimode_stack < 0x68; yabaimode_stack
+yabaimode_stack < 0x69; yabaimode_stack
+
+yabaimode_stack < shift - 0x0 ; yabaimode_stack
+yabaimode_stack < shift - 0x1 ; yabaimode_stack
+yabaimode_stack < shift - 0x2 ; yabaimode_stack
+yabaimode_stack < shift - 0x3 ; yabaimode_stack
+yabaimode_stack < shift - 0x4 ; yabaimode_stack
+yabaimode_stack < shift - 0x5 ; yabaimode_stack
+yabaimode_stack < shift - 0x6 ; yabaimode_stack
+yabaimode_stack < shift - 0x7 ; yabaimode_stack
+yabaimode_stack < shift - 0x8 ; yabaimode_stack
+yabaimode_stack < shift - 0x9 ; yabaimode_stack
+yabaimode_stack < shift - 0xA ; yabaimode_stack
+yabaimode_stack < shift - 0xB ; yabaimode_stack
+yabaimode_stack < shift - 0xC ; yabaimode_stack
+yabaimode_stack < shift - 0xD ; yabaimode_stack
+yabaimode_stack < shift - 0xE ; yabaimode_stack
+yabaimode_stack < shift - 0xF ; yabaimode_stack
+yabaimode_stack < shift - 0x10; yabaimode_stack
+yabaimode_stack < shift - 0x11; yabaimode_stack
+yabaimode_stack < shift - 0x12; yabaimode_stack
+yabaimode_stack < shift - 0x13; yabaimode_stack
+yabaimode_stack < shift - 0x14; yabaimode_stack
+yabaimode_stack < shift - 0x15; yabaimode_stack
+yabaimode_stack < shift - 0x16; yabaimode_stack
+yabaimode_stack < shift - 0x17; yabaimode_stack
+yabaimode_stack < shift - 0x18; yabaimode_stack
+yabaimode_stack < shift - 0x19; yabaimode_stack
+yabaimode_stack < shift - 0x1A; yabaimode_stack
+yabaimode_stack < shift - 0x1B; yabaimode_stack
+yabaimode_stack < shift - 0x1C; yabaimode_stack
+yabaimode_stack < shift - 0x1D; yabaimode_stack
+yabaimode_stack < shift - 0x1E; yabaimode_stack
+yabaimode_stack < shift - 0x1F; yabaimode_stack
+yabaimode_stack < shift - 0x20; yabaimode_stack
+yabaimode_stack < shift - 0x21; yabaimode_stack
+yabaimode_stack < shift - 0x22; yabaimode_stack
+yabaimode_stack < shift - 0x23; yabaimode_stack
+yabaimode_stack < shift - 0x24; yabaimode_stack
+yabaimode_stack < shift - 0x25; yabaimode_stack
+yabaimode_stack < shift - 0x26; yabaimode_stack
+yabaimode_stack < shift - 0x27; yabaimode_stack
+yabaimode_stack < shift - 0x28; yabaimode_stack
+yabaimode_stack < shift - 0x29; yabaimode_stack
+yabaimode_stack < shift - 0x2A; yabaimode_stack
+yabaimode_stack < shift - 0x2B; yabaimode_stack
+yabaimode_stack < shift - 0x2C; yabaimode_stack
+yabaimode_stack < shift - 0x2D; yabaimode_stack
+yabaimode_stack < shift - 0x2E; yabaimode_stack
+yabaimode_stack < shift - 0x2F; yabaimode_stack
+yabaimode_stack < shift - 0x30; yabaimode_stack
+yabaimode_stack < shift - 0x31; yabaimode_stack
+yabaimode_stack < shift - 0x32; yabaimode_stack
+yabaimode_stack < shift - 0x33; yabaimode_stack
+yabaimode_stack < shift - 0x34; yabaimode_stack
+yabaimode_stack < shift - 0x35; yabaimode_stack
+yabaimode_stack < shift - 0x36; yabaimode_stack
+yabaimode_stack < shift - 0x37; yabaimode_stack
+yabaimode_stack < shift - 0x38; yabaimode_stack
+yabaimode_stack < shift - 0x39; yabaimode_stack
+yabaimode_stack < shift - 0x3A; yabaimode_stack
+yabaimode_stack < shift - 0x3B; yabaimode_stack
+yabaimode_stack < shift - 0x3C; yabaimode_stack
+yabaimode_stack < shift - 0x3D; yabaimode_stack
+yabaimode_stack < shift - 0x3E; yabaimode_stack
+yabaimode_stack < shift - 0x3F; yabaimode_stack
+yabaimode_stack < shift - 0x40; yabaimode_stack
+yabaimode_stack < shift - 0x41; yabaimode_stack
+yabaimode_stack < shift - 0x42; yabaimode_stack
+yabaimode_stack < shift - 0x43; yabaimode_stack
+yabaimode_stack < shift - 0x44; yabaimode_stack
+yabaimode_stack < shift - 0x45; yabaimode_stack
+yabaimode_stack < shift - 0x46; yabaimode_stack
+yabaimode_stack < shift - 0x47; yabaimode_stack
+yabaimode_stack < shift - 0x48; yabaimode_stack
+yabaimode_stack < shift - 0x49; yabaimode_stack
+yabaimode_stack < shift - 0x4A; yabaimode_stack
+yabaimode_stack < shift - 0x4B; yabaimode_stack
+yabaimode_stack < shift - 0x4C; yabaimode_stack
+yabaimode_stack < shift - 0x4D; yabaimode_stack
+yabaimode_stack < shift - 0x4E; yabaimode_stack
+yabaimode_stack < shift - 0x4F; yabaimode_stack
+yabaimode_stack < shift - 0x50; yabaimode_stack
+yabaimode_stack < shift - 0x51; yabaimode_stack
+yabaimode_stack < shift - 0x52; yabaimode_stack
+yabaimode_stack < shift - 0x53; yabaimode_stack
+yabaimode_stack < shift - 0x54; yabaimode_stack
+yabaimode_stack < shift - 0x55; yabaimode_stack
+yabaimode_stack < shift - 0x56; yabaimode_stack
+yabaimode_stack < shift - 0x57; yabaimode_stack
+yabaimode_stack < shift - 0x58; yabaimode_stack
+yabaimode_stack < shift - 0x59; yabaimode_stack
+yabaimode_stack < shift - 0x5A; yabaimode_stack
+yabaimode_stack < shift - 0x5B; yabaimode_stack
+yabaimode_stack < shift - 0x5C; yabaimode_stack
+yabaimode_stack < shift - 0x5D; yabaimode_stack
+yabaimode_stack < shift - 0x5E; yabaimode_stack
+yabaimode_stack < shift - 0x5F; yabaimode_stack
+yabaimode_stack < shift - 0x60; yabaimode_stack
+yabaimode_stack < shift - 0x61; yabaimode_stack
+yabaimode_stack < shift - 0x62; yabaimode_stack
+yabaimode_stack < shift - 0x63; yabaimode_stack
+yabaimode_stack < shift - 0x64; yabaimode_stack
+yabaimode_stack < shift - 0x65; yabaimode_stack
+# yabaimode_stack < shift - 0x66; yabaimode_stack
+yabaimode_stack < shift - 0x67; yabaimode_stack
+# yabaimode_stack < shift - 0x68; yabaimode_stack
+yabaimode_stack < shift - 0x69; yabaimode_stack
+
+yabaimode_size < 0x0 ; yabaimode_size
+yabaimode_size < 0x1 ; yabaimode_size
+yabaimode_size < 0x2 ; yabaimode_size
+yabaimode_size < 0x3 ; yabaimode_size
+yabaimode_size < 0x4 ; yabaimode_size
+yabaimode_size < 0x5 ; yabaimode_size
+yabaimode_size < 0x6 ; yabaimode_size
+yabaimode_size < 0x7 ; yabaimode_size
+yabaimode_size < 0x8 ; yabaimode_size
+yabaimode_size < 0x9 ; yabaimode_size
+yabaimode_size < 0xA ; yabaimode_size
+yabaimode_size < 0xB ; yabaimode_size
+yabaimode_size < 0xC ; yabaimode_size
+yabaimode_size < 0xD ; yabaimode_size
+yabaimode_size < 0xE ; yabaimode_size
+yabaimode_size < 0xF ; yabaimode_size
+yabaimode_size < 0x10; yabaimode_size
+yabaimode_size < 0x11; yabaimode_size
+yabaimode_size < 0x12; yabaimode_size
+yabaimode_size < 0x13; yabaimode_size
+yabaimode_size < 0x14; yabaimode_size
+yabaimode_size < 0x15; yabaimode_size
+yabaimode_size < 0x16; yabaimode_size
+yabaimode_size < 0x17; yabaimode_size
+yabaimode_size < 0x18; yabaimode_size
+yabaimode_size < 0x19; yabaimode_size
+yabaimode_size < 0x1A; yabaimode_size
+yabaimode_size < 0x1B; yabaimode_size
+yabaimode_size < 0x1C; yabaimode_size
+yabaimode_size < 0x1D; yabaimode_size
+yabaimode_size < 0x1E; yabaimode_size
+yabaimode_size < 0x1F; yabaimode_size
+yabaimode_size < 0x20; yabaimode_size
+yabaimode_size < 0x21; yabaimode_size
+yabaimode_size < 0x22; yabaimode_size
+yabaimode_size < 0x23; yabaimode_size
+yabaimode_size < 0x24; yabaimode_size
+yabaimode_size < 0x25; yabaimode_size
+yabaimode_size < 0x26; yabaimode_size
+yabaimode_size < 0x27; yabaimode_size
+yabaimode_size < 0x28; yabaimode_size
+yabaimode_size < 0x29; yabaimode_size
+yabaimode_size < 0x2A; yabaimode_size
+yabaimode_size < 0x2B; yabaimode_size
+yabaimode_size < 0x2C; yabaimode_size
+yabaimode_size < 0x2D; yabaimode_size
+yabaimode_size < 0x2E; yabaimode_size
+yabaimode_size < 0x2F; yabaimode_size
+yabaimode_size < 0x30; yabaimode_size
+yabaimode_size < 0x31; yabaimode_size
+yabaimode_size < 0x32; yabaimode_size
+yabaimode_size < 0x33; yabaimode_size
+yabaimode_size < 0x34; yabaimode_size
+yabaimode_size < 0x35; yabaimode_size
+yabaimode_size < 0x36; yabaimode_size
+yabaimode_size < 0x37; yabaimode_size
+yabaimode_size < 0x38; yabaimode_size
+yabaimode_size < 0x39; yabaimode_size
+yabaimode_size < 0x3A; yabaimode_size
+yabaimode_size < 0x3B; yabaimode_size
+yabaimode_size < 0x3C; yabaimode_size
+yabaimode_size < 0x3D; yabaimode_size
+yabaimode_size < 0x3E; yabaimode_size
+yabaimode_size < 0x3F; yabaimode_size
+yabaimode_size < 0x40; yabaimode_size
+yabaimode_size < 0x41; yabaimode_size
+yabaimode_size < 0x42; yabaimode_size
+yabaimode_size < 0x43; yabaimode_size
+yabaimode_size < 0x44; yabaimode_size
+yabaimode_size < 0x45; yabaimode_size
+yabaimode_size < 0x46; yabaimode_size
+yabaimode_size < 0x47; yabaimode_size
+yabaimode_size < 0x48; yabaimode_size
+yabaimode_size < 0x49; yabaimode_size
+yabaimode_size < 0x4A; yabaimode_size
+yabaimode_size < 0x4B; yabaimode_size
+yabaimode_size < 0x4C; yabaimode_size
+yabaimode_size < 0x4D; yabaimode_size
+yabaimode_size < 0x4E; yabaimode_size
+yabaimode_size < 0x4F; yabaimode_size
+yabaimode_size < 0x50; yabaimode_size
+yabaimode_size < 0x51; yabaimode_size
+yabaimode_size < 0x52; yabaimode_size
+yabaimode_size < 0x53; yabaimode_size
+yabaimode_size < 0x54; yabaimode_size
+yabaimode_size < 0x55; yabaimode_size
+yabaimode_size < 0x56; yabaimode_size
+yabaimode_size < 0x57; yabaimode_size
+yabaimode_size < 0x58; yabaimode_size
+yabaimode_size < 0x59; yabaimode_size
+yabaimode_size < 0x5A; yabaimode_size
+yabaimode_size < 0x5B; yabaimode_size
+yabaimode_size < 0x5C; yabaimode_size
+yabaimode_size < 0x5D; yabaimode_size
+yabaimode_size < 0x5E; yabaimode_size
+yabaimode_size < 0x5F; yabaimode_size
+yabaimode_size < 0x60; yabaimode_size
+yabaimode_size < 0x61; yabaimode_size
+yabaimode_size < 0x62; yabaimode_size
+yabaimode_size < 0x63; yabaimode_size
+yabaimode_size < 0x64; yabaimode_size
+yabaimode_size < 0x65; yabaimode_size
+yabaimode_size < 0x66; yabaimode_size
+yabaimode_size < 0x67; yabaimode_size
+yabaimode_size < 0x68; yabaimode_size
+yabaimode_size < 0x69; yabaimode_size
+
+yabaimode_size < shift - 0x0 ; yabaimode_size
+yabaimode_size < shift - 0x1 ; yabaimode_size
+yabaimode_size < shift - 0x2 ; yabaimode_size
+yabaimode_size < shift - 0x3 ; yabaimode_size
+yabaimode_size < shift - 0x4 ; yabaimode_size
+yabaimode_size < shift - 0x5 ; yabaimode_size
+yabaimode_size < shift - 0x6 ; yabaimode_size
+yabaimode_size < shift - 0x7 ; yabaimode_size
+yabaimode_size < shift - 0x8 ; yabaimode_size
+yabaimode_size < shift - 0x9 ; yabaimode_size
+yabaimode_size < shift - 0xA ; yabaimode_size
+yabaimode_size < shift - 0xB ; yabaimode_size
+yabaimode_size < shift - 0xC ; yabaimode_size
+yabaimode_size < shift - 0xD ; yabaimode_size
+yabaimode_size < shift - 0xE ; yabaimode_size
+yabaimode_size < shift - 0xF ; yabaimode_size
+yabaimode_size < shift - 0x10; yabaimode_size
+yabaimode_size < shift - 0x11; yabaimode_size
+yabaimode_size < shift - 0x12; yabaimode_size
+yabaimode_size < shift - 0x13; yabaimode_size
+yabaimode_size < shift - 0x14; yabaimode_size
+yabaimode_size < shift - 0x15; yabaimode_size
+yabaimode_size < shift - 0x16; yabaimode_size
+yabaimode_size < shift - 0x17; yabaimode_size
+yabaimode_size < shift - 0x18; yabaimode_size
+yabaimode_size < shift - 0x19; yabaimode_size
+yabaimode_size < shift - 0x1A; yabaimode_size
+yabaimode_size < shift - 0x1B; yabaimode_size
+yabaimode_size < shift - 0x1C; yabaimode_size
+yabaimode_size < shift - 0x1D; yabaimode_size
+yabaimode_size < shift - 0x1E; yabaimode_size
+yabaimode_size < shift - 0x1F; yabaimode_size
+yabaimode_size < shift - 0x20; yabaimode_size
+yabaimode_size < shift - 0x21; yabaimode_size
+yabaimode_size < shift - 0x22; yabaimode_size
+yabaimode_size < shift - 0x23; yabaimode_size
+yabaimode_size < shift - 0x24; yabaimode_size
+yabaimode_size < shift - 0x25; yabaimode_size
+yabaimode_size < shift - 0x26; yabaimode_size
+yabaimode_size < shift - 0x27; yabaimode_size
+yabaimode_size < shift - 0x28; yabaimode_size
+yabaimode_size < shift - 0x29; yabaimode_size
+yabaimode_size < shift - 0x2A; yabaimode_size
+yabaimode_size < shift - 0x2B; yabaimode_size
+yabaimode_size < shift - 0x2C; yabaimode_size
+yabaimode_size < shift - 0x2D; yabaimode_size
+yabaimode_size < shift - 0x2E; yabaimode_size
+yabaimode_size < shift - 0x2F; yabaimode_size
+yabaimode_size < shift - 0x30; yabaimode_size
+yabaimode_size < shift - 0x31; yabaimode_size
+yabaimode_size < shift - 0x32; yabaimode_size
+yabaimode_size < shift - 0x33; yabaimode_size
+yabaimode_size < shift - 0x34; yabaimode_size
+yabaimode_size < shift - 0x35; yabaimode_size
+yabaimode_size < shift - 0x36; yabaimode_size
+yabaimode_size < shift - 0x37; yabaimode_size
+yabaimode_size < shift - 0x38; yabaimode_size
+yabaimode_size < shift - 0x39; yabaimode_size
+yabaimode_size < shift - 0x3A; yabaimode_size
+yabaimode_size < shift - 0x3B; yabaimode_size
+yabaimode_size < shift - 0x3C; yabaimode_size
+yabaimode_size < shift - 0x3D; yabaimode_size
+yabaimode_size < shift - 0x3E; yabaimode_size
+yabaimode_size < shift - 0x3F; yabaimode_size
+yabaimode_size < shift - 0x40; yabaimode_size
+yabaimode_size < shift - 0x41; yabaimode_size
+yabaimode_size < shift - 0x42; yabaimode_size
+yabaimode_size < shift - 0x43; yabaimode_size
+yabaimode_size < shift - 0x44; yabaimode_size
+yabaimode_size < shift - 0x45; yabaimode_size
+yabaimode_size < shift - 0x46; yabaimode_size
+yabaimode_size < shift - 0x47; yabaimode_size
+yabaimode_size < shift - 0x48; yabaimode_size
+yabaimode_size < shift - 0x49; yabaimode_size
+yabaimode_size < shift - 0x4A; yabaimode_size
+yabaimode_size < shift - 0x4B; yabaimode_size
+yabaimode_size < shift - 0x4C; yabaimode_size
+yabaimode_size < shift - 0x4D; yabaimode_size
+yabaimode_size < shift - 0x4E; yabaimode_size
+yabaimode_size < shift - 0x4F; yabaimode_size
+yabaimode_size < shift - 0x50; yabaimode_size
+yabaimode_size < shift - 0x51; yabaimode_size
+yabaimode_size < shift - 0x52; yabaimode_size
+yabaimode_size < shift - 0x53; yabaimode_size
+yabaimode_size < shift - 0x54; yabaimode_size
+yabaimode_size < shift - 0x55; yabaimode_size
+yabaimode_size < shift - 0x56; yabaimode_size
+yabaimode_size < shift - 0x57; yabaimode_size
+yabaimode_size < shift - 0x58; yabaimode_size
+yabaimode_size < shift - 0x59; yabaimode_size
+yabaimode_size < shift - 0x5A; yabaimode_size
+yabaimode_size < shift - 0x5B; yabaimode_size
+yabaimode_size < shift - 0x5C; yabaimode_size
+yabaimode_size < shift - 0x5D; yabaimode_size
+yabaimode_size < shift - 0x5E; yabaimode_size
+yabaimode_size < shift - 0x5F; yabaimode_size
+yabaimode_size < shift - 0x60; yabaimode_size
+yabaimode_size < shift - 0x61; yabaimode_size
+yabaimode_size < shift - 0x62; yabaimode_size
+yabaimode_size < shift - 0x63; yabaimode_size
+yabaimode_size < shift - 0x64; yabaimode_size
+yabaimode_size < shift - 0x65; yabaimode_size
+# yabaimode_size < shift - 0x66; yabaimode_size
+yabaimode_size < shift - 0x67; yabaimode_size
+# yabaimode_size < shift - 0x68; yabaimode_size
+yabaimode_size < shift - 0x69; yabaimode_size
+
+yabaimode_float < 0x0 ; yabaimode_float
+yabaimode_float < 0x1 ; yabaimode_float
+yabaimode_float < 0x2 ; yabaimode_float
+yabaimode_float < 0x3 ; yabaimode_float
+yabaimode_float < 0x4 ; yabaimode_float
+yabaimode_float < 0x5 ; yabaimode_float
+yabaimode_float < 0x6 ; yabaimode_float
+yabaimode_float < 0x7 ; yabaimode_float
+yabaimode_float < 0x8 ; yabaimode_float
+yabaimode_float < 0x9 ; yabaimode_float
+yabaimode_float < 0xA ; yabaimode_float
+yabaimode_float < 0xB ; yabaimode_float
+yabaimode_float < 0xC ; yabaimode_float
+yabaimode_float < 0xD ; yabaimode_float
+yabaimode_float < 0xE ; yabaimode_float
+yabaimode_float < 0xF ; yabaimode_float
+yabaimode_float < 0x10; yabaimode_float
+yabaimode_float < 0x11; yabaimode_float
+yabaimode_float < 0x12; yabaimode_float
+yabaimode_float < 0x13; yabaimode_float
+yabaimode_float < 0x14; yabaimode_float
+yabaimode_float < 0x15; yabaimode_float
+yabaimode_float < 0x16; yabaimode_float
+yabaimode_float < 0x17; yabaimode_float
+yabaimode_float < 0x18; yabaimode_float
+yabaimode_float < 0x19; yabaimode_float
+yabaimode_float < 0x1A; yabaimode_float
+yabaimode_float < 0x1B; yabaimode_float
+yabaimode_float < 0x1C; yabaimode_float
+yabaimode_float < 0x1D; yabaimode_float
+yabaimode_float < 0x1E; yabaimode_float
+yabaimode_float < 0x1F; yabaimode_float
+yabaimode_float < 0x20; yabaimode_float
+yabaimode_float < 0x21; yabaimode_float
+yabaimode_float < 0x22; yabaimode_float
+yabaimode_float < 0x23; yabaimode_float
+yabaimode_float < 0x24; yabaimode_float
+yabaimode_float < 0x25; yabaimode_float
+yabaimode_float < 0x26; yabaimode_float
+yabaimode_float < 0x27; yabaimode_float
+yabaimode_float < 0x28; yabaimode_float
+yabaimode_float < 0x29; yabaimode_float
+yabaimode_float < 0x2A; yabaimode_float
+yabaimode_float < 0x2B; yabaimode_float
+yabaimode_float < 0x2C; yabaimode_float
+yabaimode_float < 0x2D; yabaimode_float
+yabaimode_float < 0x2E; yabaimode_float
+yabaimode_float < 0x2F; yabaimode_float
+yabaimode_float < 0x30; yabaimode_float
+yabaimode_float < 0x31; yabaimode_float
+yabaimode_float < 0x32; yabaimode_float
+yabaimode_float < 0x33; yabaimode_float
+yabaimode_float < 0x34; yabaimode_float
+yabaimode_float < 0x35; yabaimode_float
+yabaimode_float < 0x36; yabaimode_float
+yabaimode_float < 0x37; yabaimode_float
+yabaimode_float < 0x38; yabaimode_float
+yabaimode_float < 0x39; yabaimode_float
+yabaimode_float < 0x3A; yabaimode_float
+yabaimode_float < 0x3B; yabaimode_float
+yabaimode_float < 0x3C; yabaimode_float
+yabaimode_float < 0x3D; yabaimode_float
+yabaimode_float < 0x3E; yabaimode_float
+yabaimode_float < 0x3F; yabaimode_float
+yabaimode_float < 0x40; yabaimode_float
+yabaimode_float < 0x41; yabaimode_float
+yabaimode_float < 0x42; yabaimode_float
+yabaimode_float < 0x43; yabaimode_float
+yabaimode_float < 0x44; yabaimode_float
+yabaimode_float < 0x45; yabaimode_float
+yabaimode_float < 0x46; yabaimode_float
+yabaimode_float < 0x47; yabaimode_float
+yabaimode_float < 0x48; yabaimode_float
+yabaimode_float < 0x49; yabaimode_float
+yabaimode_float < 0x4A; yabaimode_float
+yabaimode_float < 0x4B; yabaimode_float
+yabaimode_float < 0x4C; yabaimode_float
+yabaimode_float < 0x4D; yabaimode_float
+yabaimode_float < 0x4E; yabaimode_float
+yabaimode_float < 0x4F; yabaimode_float
+yabaimode_float < 0x50; yabaimode_float
+yabaimode_float < 0x51; yabaimode_float
+yabaimode_float < 0x52; yabaimode_float
+yabaimode_float < 0x53; yabaimode_float
+yabaimode_float < 0x54; yabaimode_float
+yabaimode_float < 0x55; yabaimode_float
+yabaimode_float < 0x56; yabaimode_float
+yabaimode_float < 0x57; yabaimode_float
+yabaimode_float < 0x58; yabaimode_float
+yabaimode_float < 0x59; yabaimode_float
+yabaimode_float < 0x5A; yabaimode_float
+yabaimode_float < 0x5B; yabaimode_float
+yabaimode_float < 0x5C; yabaimode_float
+yabaimode_float < 0x5D; yabaimode_float
+yabaimode_float < 0x5E; yabaimode_float
+yabaimode_float < 0x5F; yabaimode_float
+yabaimode_float < 0x60; yabaimode_float
+yabaimode_float < 0x61; yabaimode_float
+yabaimode_float < 0x62; yabaimode_float
+yabaimode_float < 0x63; yabaimode_float
+yabaimode_float < 0x64; yabaimode_float
+yabaimode_float < 0x65; yabaimode_float
+yabaimode_float < 0x66; yabaimode_float
+yabaimode_float < 0x67; yabaimode_float
+yabaimode_float < 0x68; yabaimode_float
+yabaimode_float < 0x69; yabaimode_float
+
+yabaimode_float < shift - 0x0 ; yabaimode_float
+yabaimode_float < shift - 0x1 ; yabaimode_float
+yabaimode_float < shift - 0x2 ; yabaimode_float
+yabaimode_float < shift - 0x3 ; yabaimode_float
+yabaimode_float < shift - 0x4 ; yabaimode_float
+yabaimode_float < shift - 0x5 ; yabaimode_float
+yabaimode_float < shift - 0x6 ; yabaimode_float
+yabaimode_float < shift - 0x7 ; yabaimode_float
+yabaimode_float < shift - 0x8 ; yabaimode_float
+yabaimode_float < shift - 0x9 ; yabaimode_float
+yabaimode_float < shift - 0xA ; yabaimode_float
+yabaimode_float < shift - 0xB ; yabaimode_float
+yabaimode_float < shift - 0xC ; yabaimode_float
+yabaimode_float < shift - 0xD ; yabaimode_float
+yabaimode_float < shift - 0xE ; yabaimode_float
+yabaimode_float < shift - 0xF ; yabaimode_float
+yabaimode_float < shift - 0x10; yabaimode_float
+yabaimode_float < shift - 0x11; yabaimode_float
+yabaimode_float < shift - 0x12; yabaimode_float
+yabaimode_float < shift - 0x13; yabaimode_float
+yabaimode_float < shift - 0x14; yabaimode_float
+yabaimode_float < shift - 0x15; yabaimode_float
+yabaimode_float < shift - 0x16; yabaimode_float
+yabaimode_float < shift - 0x17; yabaimode_float
+yabaimode_float < shift - 0x18; yabaimode_float
+yabaimode_float < shift - 0x19; yabaimode_float
+yabaimode_float < shift - 0x1A; yabaimode_float
+yabaimode_float < shift - 0x1B; yabaimode_float
+yabaimode_float < shift - 0x1C; yabaimode_float
+yabaimode_float < shift - 0x1D; yabaimode_float
+yabaimode_float < shift - 0x1E; yabaimode_float
+yabaimode_float < shift - 0x1F; yabaimode_float
+yabaimode_float < shift - 0x20; yabaimode_float
+yabaimode_float < shift - 0x21; yabaimode_float
+yabaimode_float < shift - 0x22; yabaimode_float
+yabaimode_float < shift - 0x23; yabaimode_float
+yabaimode_float < shift - 0x24; yabaimode_float
+yabaimode_float < shift - 0x25; yabaimode_float
+yabaimode_float < shift - 0x26; yabaimode_float
+yabaimode_float < shift - 0x27; yabaimode_float
+yabaimode_float < shift - 0x28; yabaimode_float
+yabaimode_float < shift - 0x29; yabaimode_float
+yabaimode_float < shift - 0x2A; yabaimode_float
+yabaimode_float < shift - 0x2B; yabaimode_float
+yabaimode_float < shift - 0x2C; yabaimode_float
+yabaimode_float < shift - 0x2D; yabaimode_float
+yabaimode_float < shift - 0x2E; yabaimode_float
+yabaimode_float < shift - 0x2F; yabaimode_float
+yabaimode_float < shift - 0x30; yabaimode_float
+yabaimode_float < shift - 0x31; yabaimode_float
+yabaimode_float < shift - 0x32; yabaimode_float
+yabaimode_float < shift - 0x33; yabaimode_float
+yabaimode_float < shift - 0x34; yabaimode_float
+yabaimode_float < shift - 0x35; yabaimode_float
+yabaimode_float < shift - 0x36; yabaimode_float
+yabaimode_float < shift - 0x37; yabaimode_float
+yabaimode_float < shift - 0x38; yabaimode_float
+yabaimode_float < shift - 0x39; yabaimode_float
+yabaimode_float < shift - 0x3A; yabaimode_float
+yabaimode_float < shift - 0x3B; yabaimode_float
+yabaimode_float < shift - 0x3C; yabaimode_float
+yabaimode_float < shift - 0x3D; yabaimode_float
+yabaimode_float < shift - 0x3E; yabaimode_float
+yabaimode_float < shift - 0x3F; yabaimode_float
+yabaimode_float < shift - 0x40; yabaimode_float
+yabaimode_float < shift - 0x41; yabaimode_float
+yabaimode_float < shift - 0x42; yabaimode_float
+yabaimode_float < shift - 0x43; yabaimode_float
+yabaimode_float < shift - 0x44; yabaimode_float
+yabaimode_float < shift - 0x45; yabaimode_float
+yabaimode_float < shift - 0x46; yabaimode_float
+yabaimode_float < shift - 0x47; yabaimode_float
+yabaimode_float < shift - 0x48; yabaimode_float
+yabaimode_float < shift - 0x49; yabaimode_float
+yabaimode_float < shift - 0x4A; yabaimode_float
+yabaimode_float < shift - 0x4B; yabaimode_float
+yabaimode_float < shift - 0x4C; yabaimode_float
+yabaimode_float < shift - 0x4D; yabaimode_float
+yabaimode_float < shift - 0x4E; yabaimode_float
+yabaimode_float < shift - 0x4F; yabaimode_float
+yabaimode_float < shift - 0x50; yabaimode_float
+yabaimode_float < shift - 0x51; yabaimode_float
+yabaimode_float < shift - 0x52; yabaimode_float
+yabaimode_float < shift - 0x53; yabaimode_float
+yabaimode_float < shift - 0x54; yabaimode_float
+yabaimode_float < shift - 0x55; yabaimode_float
+yabaimode_float < shift - 0x56; yabaimode_float
+yabaimode_float < shift - 0x57; yabaimode_float
+yabaimode_float < shift - 0x58; yabaimode_float
+yabaimode_float < shift - 0x59; yabaimode_float
+yabaimode_float < shift - 0x5A; yabaimode_float
+yabaimode_float < shift - 0x5B; yabaimode_float
+yabaimode_float < shift - 0x5C; yabaimode_float
+yabaimode_float < shift - 0x5D; yabaimode_float
+yabaimode_float < shift - 0x5E; yabaimode_float
+yabaimode_float < shift - 0x5F; yabaimode_float
+yabaimode_float < shift - 0x60; yabaimode_float
+yabaimode_float < shift - 0x61; yabaimode_float
+yabaimode_float < shift - 0x62; yabaimode_float
+yabaimode_float < shift - 0x63; yabaimode_float
+yabaimode_float < shift - 0x64; yabaimode_float
+yabaimode_float < shift - 0x65; yabaimode_float
+# yabaimode_float < shift - 0x66; yabaimode_float
+yabaimode_float < shift - 0x67; yabaimode_float
+# yabaimode_float < shift - 0x68; yabaimode_float
+yabaimode_float < shift - 0x69; yabaimode_float
+
+yabaimode_service < 0x0 ; yabaimode_service
+yabaimode_service < 0x1 ; yabaimode_service
+yabaimode_service < 0x2 ; yabaimode_service
+yabaimode_service < 0x3 ; yabaimode_service
+yabaimode_service < 0x4 ; yabaimode_service
+yabaimode_service < 0x5 ; yabaimode_service
+yabaimode_service < 0x6 ; yabaimode_service
+yabaimode_service < 0x7 ; yabaimode_service
+yabaimode_service < 0x8 ; yabaimode_service
+yabaimode_service < 0x9 ; yabaimode_service
+yabaimode_service < 0xA ; yabaimode_service
+yabaimode_service < 0xB ; yabaimode_service
+yabaimode_service < 0xC ; yabaimode_service
+yabaimode_service < 0xD ; yabaimode_service
+yabaimode_service < 0xE ; yabaimode_service
+yabaimode_service < 0xF ; yabaimode_service
+yabaimode_service < 0x10; yabaimode_service
+yabaimode_service < 0x11; yabaimode_service
+yabaimode_service < 0x12; yabaimode_service
+yabaimode_service < 0x13; yabaimode_service
+yabaimode_service < 0x14; yabaimode_service
+yabaimode_service < 0x15; yabaimode_service
+yabaimode_service < 0x16; yabaimode_service
+yabaimode_service < 0x17; yabaimode_service
+yabaimode_service < 0x18; yabaimode_service
+yabaimode_service < 0x19; yabaimode_service
+yabaimode_service < 0x1A; yabaimode_service
+yabaimode_service < 0x1B; yabaimode_service
+yabaimode_service < 0x1C; yabaimode_service
+yabaimode_service < 0x1D; yabaimode_service
+yabaimode_service < 0x1E; yabaimode_service
+yabaimode_service < 0x1F; yabaimode_service
+yabaimode_service < 0x20; yabaimode_service
+yabaimode_service < 0x21; yabaimode_service
+yabaimode_service < 0x22; yabaimode_service
+yabaimode_service < 0x23; yabaimode_service
+yabaimode_service < 0x24; yabaimode_service
+yabaimode_service < 0x25; yabaimode_service
+yabaimode_service < 0x26; yabaimode_service
+yabaimode_service < 0x27; yabaimode_service
+yabaimode_service < 0x28; yabaimode_service
+yabaimode_service < 0x29; yabaimode_service
+yabaimode_service < 0x2A; yabaimode_service
+yabaimode_service < 0x2B; yabaimode_service
+yabaimode_service < 0x2C; yabaimode_service
+yabaimode_service < 0x2D; yabaimode_service
+yabaimode_service < 0x2E; yabaimode_service
+yabaimode_service < 0x2F; yabaimode_service
+yabaimode_service < 0x30; yabaimode_service
+yabaimode_service < 0x31; yabaimode_service
+yabaimode_service < 0x32; yabaimode_service
+yabaimode_service < 0x33; yabaimode_service
+yabaimode_service < 0x34; yabaimode_service
+yabaimode_service < 0x35; yabaimode_service
+yabaimode_service < 0x36; yabaimode_service
+yabaimode_service < 0x37; yabaimode_service
+yabaimode_service < 0x38; yabaimode_service
+yabaimode_service < 0x39; yabaimode_service
+yabaimode_service < 0x3A; yabaimode_service
+yabaimode_service < 0x3B; yabaimode_service
+yabaimode_service < 0x3C; yabaimode_service
+yabaimode_service < 0x3D; yabaimode_service
+yabaimode_service < 0x3E; yabaimode_service
+yabaimode_service < 0x3F; yabaimode_service
+yabaimode_service < 0x40; yabaimode_service
+yabaimode_service < 0x41; yabaimode_service
+yabaimode_service < 0x42; yabaimode_service
+yabaimode_service < 0x43; yabaimode_service
+yabaimode_service < 0x44; yabaimode_service
+yabaimode_service < 0x45; yabaimode_service
+yabaimode_service < 0x46; yabaimode_service
+yabaimode_service < 0x47; yabaimode_service
+yabaimode_service < 0x48; yabaimode_service
+yabaimode_service < 0x49; yabaimode_service
+yabaimode_service < 0x4A; yabaimode_service
+yabaimode_service < 0x4B; yabaimode_service
+yabaimode_service < 0x4C; yabaimode_service
+yabaimode_service < 0x4D; yabaimode_service
+yabaimode_service < 0x4E; yabaimode_service
+yabaimode_service < 0x4F; yabaimode_service
+yabaimode_service < 0x50; yabaimode_service
+yabaimode_service < 0x51; yabaimode_service
+yabaimode_service < 0x52; yabaimode_service
+yabaimode_service < 0x53; yabaimode_service
+yabaimode_service < 0x54; yabaimode_service
+yabaimode_service < 0x55; yabaimode_service
+yabaimode_service < 0x56; yabaimode_service
+yabaimode_service < 0x57; yabaimode_service
+yabaimode_service < 0x58; yabaimode_service
+yabaimode_service < 0x59; yabaimode_service
+yabaimode_service < 0x5A; yabaimode_service
+yabaimode_service < 0x5B; yabaimode_service
+yabaimode_service < 0x5C; yabaimode_service
+yabaimode_service < 0x5D; yabaimode_service
+yabaimode_service < 0x5E; yabaimode_service
+yabaimode_service < 0x5F; yabaimode_service
+yabaimode_service < 0x60; yabaimode_service
+yabaimode_service < 0x61; yabaimode_service
+yabaimode_service < 0x62; yabaimode_service
+yabaimode_service < 0x63; yabaimode_service
+yabaimode_service < 0x64; yabaimode_service
+yabaimode_service < 0x65; yabaimode_service
+yabaimode_service < 0x66; yabaimode_service
+yabaimode_service < 0x67; yabaimode_service
+yabaimode_service < 0x68; yabaimode_service
+yabaimode_service < 0x69; yabaimode_service
+
+yabaimode_service < shift - 0x0 ; yabaimode_service
+yabaimode_service < shift - 0x1 ; yabaimode_service
+yabaimode_service < shift - 0x2 ; yabaimode_service
+yabaimode_service < shift - 0x3 ; yabaimode_service
+yabaimode_service < shift - 0x4 ; yabaimode_service
+yabaimode_service < shift - 0x5 ; yabaimode_service
+yabaimode_service < shift - 0x6 ; yabaimode_service
+yabaimode_service < shift - 0x7 ; yabaimode_service
+yabaimode_service < shift - 0x8 ; yabaimode_service
+yabaimode_service < shift - 0x9 ; yabaimode_service
+yabaimode_service < shift - 0xA ; yabaimode_service
+yabaimode_service < shift - 0xB ; yabaimode_service
+yabaimode_service < shift - 0xC ; yabaimode_service
+yabaimode_service < shift - 0xD ; yabaimode_service
+yabaimode_service < shift - 0xE ; yabaimode_service
+yabaimode_service < shift - 0xF ; yabaimode_service
+yabaimode_service < shift - 0x10; yabaimode_service
+yabaimode_service < shift - 0x11; yabaimode_service
+yabaimode_service < shift - 0x12; yabaimode_service
+yabaimode_service < shift - 0x13; yabaimode_service
+yabaimode_service < shift - 0x14; yabaimode_service
+yabaimode_service < shift - 0x15; yabaimode_service
+yabaimode_service < shift - 0x16; yabaimode_service
+yabaimode_service < shift - 0x17; yabaimode_service
+yabaimode_service < shift - 0x18; yabaimode_service
+yabaimode_service < shift - 0x19; yabaimode_service
+yabaimode_service < shift - 0x1A; yabaimode_service
+yabaimode_service < shift - 0x1B; yabaimode_service
+yabaimode_service < shift - 0x1C; yabaimode_service
+yabaimode_service < shift - 0x1D; yabaimode_service
+yabaimode_service < shift - 0x1E; yabaimode_service
+yabaimode_service < shift - 0x1F; yabaimode_service
+yabaimode_service < shift - 0x20; yabaimode_service
+yabaimode_service < shift - 0x21; yabaimode_service
+yabaimode_service < shift - 0x22; yabaimode_service
+yabaimode_service < shift - 0x23; yabaimode_service
+yabaimode_service < shift - 0x24; yabaimode_service
+yabaimode_service < shift - 0x25; yabaimode_service
+yabaimode_service < shift - 0x26; yabaimode_service
+yabaimode_service < shift - 0x27; yabaimode_service
+yabaimode_service < shift - 0x28; yabaimode_service
+yabaimode_service < shift - 0x29; yabaimode_service
+yabaimode_service < shift - 0x2A; yabaimode_service
+yabaimode_service < shift - 0x2B; yabaimode_service
+yabaimode_service < shift - 0x2C; yabaimode_service
+yabaimode_service < shift - 0x2D; yabaimode_service
+yabaimode_service < shift - 0x2E; yabaimode_service
+yabaimode_service < shift - 0x2F; yabaimode_service
+yabaimode_service < shift - 0x30; yabaimode_service
+yabaimode_service < shift - 0x31; yabaimode_service
+yabaimode_service < shift - 0x32; yabaimode_service
+yabaimode_service < shift - 0x33; yabaimode_service
+yabaimode_service < shift - 0x34; yabaimode_service
+yabaimode_service < shift - 0x35; yabaimode_service
+yabaimode_service < shift - 0x36; yabaimode_service
+yabaimode_service < shift - 0x37; yabaimode_service
+yabaimode_service < shift - 0x38; yabaimode_service
+yabaimode_service < shift - 0x39; yabaimode_service
+yabaimode_service < shift - 0x3A; yabaimode_service
+yabaimode_service < shift - 0x3B; yabaimode_service
+yabaimode_service < shift - 0x3C; yabaimode_service
+yabaimode_service < shift - 0x3D; yabaimode_service
+yabaimode_service < shift - 0x3E; yabaimode_service
+yabaimode_service < shift - 0x3F; yabaimode_service
+yabaimode_service < shift - 0x40; yabaimode_service
+yabaimode_service < shift - 0x41; yabaimode_service
+yabaimode_service < shift - 0x42; yabaimode_service
+yabaimode_service < shift - 0x43; yabaimode_service
+yabaimode_service < shift - 0x44; yabaimode_service
+yabaimode_service < shift - 0x45; yabaimode_service
+yabaimode_service < shift - 0x46; yabaimode_service
+yabaimode_service < shift - 0x47; yabaimode_service
+yabaimode_service < shift - 0x48; yabaimode_service
+yabaimode_service < shift - 0x49; yabaimode_service
+yabaimode_service < shift - 0x4A; yabaimode_service
+yabaimode_service < shift - 0x4B; yabaimode_service
+yabaimode_service < shift - 0x4C; yabaimode_service
+yabaimode_service < shift - 0x4D; yabaimode_service
+yabaimode_service < shift - 0x4E; yabaimode_service
+yabaimode_service < shift - 0x4F; yabaimode_service
+yabaimode_service < shift - 0x50; yabaimode_service
+yabaimode_service < shift - 0x51; yabaimode_service
+yabaimode_service < shift - 0x52; yabaimode_service
+yabaimode_service < shift - 0x53; yabaimode_service
+yabaimode_service < shift - 0x54; yabaimode_service
+yabaimode_service < shift - 0x55; yabaimode_service
+yabaimode_service < shift - 0x56; yabaimode_service
+yabaimode_service < shift - 0x57; yabaimode_service
+yabaimode_service < shift - 0x58; yabaimode_service
+yabaimode_service < shift - 0x59; yabaimode_service
+yabaimode_service < shift - 0x5A; yabaimode_service
+yabaimode_service < shift - 0x5B; yabaimode_service
+yabaimode_service < shift - 0x5C; yabaimode_service
+yabaimode_service < shift - 0x5D; yabaimode_service
+yabaimode_service < shift - 0x5E; yabaimode_service
+yabaimode_service < shift - 0x5F; yabaimode_service
+yabaimode_service < shift - 0x60; yabaimode_service
+yabaimode_service < shift - 0x61; yabaimode_service
+yabaimode_service < shift - 0x62; yabaimode_service
+yabaimode_service < shift - 0x63; yabaimode_service
+yabaimode_service < shift - 0x64; yabaimode_service
+yabaimode_service < shift - 0x65; yabaimode_service
+# yabaimode_service < shift - 0x66; yabaimode_service
+yabaimode_service < shift - 0x67; yabaimode_service
+# yabaimode_service < shift - 0x68; yabaimode_service
+yabaimode_service < shift - 0x69; yabaimode_service
+
