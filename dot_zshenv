@@ -1,20 +1,17 @@
-function yabai_2way_vertical {
+function yabai_2way_vertical_2 {
     yabai -m space --layout bsp \
+        && yabai -m window --swap last \
         && yabai -m window --focus last \
         && yabai -m window --focus prev \
         && while [[ $? -eq 0 ]]; do
             yabai -m window --stack prev
         done
+        yabai -m window --focus east
 }
 
-function yabai_2way_horizontal {
-    yabai -m space --layout bsp \
-        && yabai -m window --focus last \
+function yabai_2way_horizontal_2 {
+    yabai_2way_vertical_2 \
         && yabai -m window --toggle split \
-        && yabai -m window --focus prev \
-        && while [[ $? -eq 0 ]]; do
-            yabai -m window --stack prev
-        done
 }
 
 function yabai_pop_stack_right {
