@@ -1,5 +1,7 @@
 # `modal_yabai`
-  - Modal keybindings for `yabai` + `skhd`
+Modal keybindings
+  - for `yabai` (titling window manager for macOS)
+  - with `skhd` (hotkey daemon for macOS).
 
 ## Dependencies
 - [`yabai`](https://github.com/koekeishiya/yabai) (5.0.2)
