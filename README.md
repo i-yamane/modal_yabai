@@ -15,12 +15,16 @@ Modal keybindings
 
 ## Installation
 Place the content of
+
 - `dot_skhdrc` to `~/.skhdrc`
+
 - `dot_yabairc` to `~/.yabairc`
+
 - `dot_zshenv` to `~/.zshenv`
+
 - `dot_hammerspoon/init.lua` to `~/.hammerspoon/init.lua`
 
-This `.skhdrc` assumes the Japanese keyboard of Macbooks. In particular, it heavily uses <KANA> and <EISU> keys.
+This `.skhdrc` assumes the Japanese keyboard of Macbooks. In particular, it heavily uses &lt;KANA&gt; and &lt;EISU&gt; keys.
 Change the keycodes used in the file appropriately according to your keyboard.
 
 ## Usage
@@ -28,26 +32,31 @@ Change the keycodes used in the file appropriately according to your keyboard.
 ### How to start
 1. Start `skhd` as a service or directly in a terminal.
 I personally execute `skhd -V` from a terminal.
-1. Type "<Ctrl>-<KANA> S S" to start a yabai service.
-1. Type "<Ctrl>-<EISU>" to stop interacting with `modal_yabai`.
+1. Type "&lt;Ctrl&gt;-&lt;KANA&gt; S S" to start a `yabai` service.
 
 ### yabai modes
 _yabai modes_ are modes defined in `.skhdrc` for interacting with yabai.
-- To enter the initial mode _yabai-home-mode_, type "[Ctrl]-[KANA]".
+- To enter the initial mode _yabai-home-mode_, type "&lt;Ctrl&gt;-&lt;KANA&gt;".
+
 - Follow the instructions in the pop-up window.
-- To exit any yabai mode and stop interacting with yabai, type "[Ctrl]-[EISU]".
+
+- To stop interacting with yabai, type "&lt;Ctrl&gt;-&lt;KANA&gt;".
+
+- To stop the `yabai` service, type "&lt;Ctrl&gt;-&lt;KANA&gt; S Q".
 
 ## Tips
 ### Two-tile view
-My favorite command is arranging windows into two vertically split stacks with "<Ctrl>-<KANA> l v".
+My favorite command is arranging windows into two vertically split stacks with "&lt;Ctrl&gt;-&lt;KANA&gt; l v".
 
 ### Changing focus
 You can
-- switch the focus between windows with <Cmd>-<Tab> or yabai-focus-mode (<Ctrl>-<KANA> <Tab>)
-- or move it to the other stack "<Ctrl>-<KANA> <Space> <Shift>-h" or "<Ctrl>-<KANA> <Space> <Shift>-l".
+
+- switch the focus between windows with &lt;Cmd&gt;-&lt;Tab&gt; or yabai-focus-mode (&lt;Ctrl&gt;-&lt;KANA&gt; &lt;Tab&gt;)
+
+- and move a window to the other stack "&lt;Ctrl&gt;-&lt;KANA&gt; &lt;Space&gt; &lt;Shift&gt;-h" or "&lt;Ctrl&gt;-&lt;KANA&gt; &lt;Space&gt; &lt;Shift&gt;-l".
 
 ### Temporarily maximizing a window
-You can temporarily maximize a window with "<Ctrl>-<KANA> l z". The same command brings me back to the two-tile view (it is a toggle command).
+You can temporarily maximize a window with "&lt;Ctrl&gt;-&lt;KANA&gt; l z". The same command brings me back to the two-tile view (it is a toggle command).
 
 ## Bugs
-Changing focus with "<Ctrl>-<KANA> <Tab> <Shift>-{h, k}" stopped working, but I keep the command there hoping that someone can tell me how to fix it.
+Changing focus with "&lt;Ctrl&gt;-&lt;KANA&gt; &lt;Tab&gt; &lt;Shift&gt;-{h, k}" stopped working, but I keep the command there hoping that someone can tell me how to fix it.
