@@ -194,8 +194,8 @@ yabaimode_layout < p : yabai -m window --toggle zoom-parent
 yabaimode_layout < b : yabai -m space --layout bsp
 yabaimode_layout < s : yabai -m space --layout stack
 yabaimode_layout < f : yabai -m space --layout float
-yabaimode_layout < v : yabai_2way_vertical
-yabaimode_layout < h : yabai_2way_horizontal
+yabaimode_layout < v : yabai_2way_vertical_2
+yabaimode_layout < h : yabai_2way_horizontal_2
 
 ## toggle sticky(+float), topmost, picture-in-picture
 yabaimode_layout < t : yabai -m window --toggle sticky;\
@@ -315,7 +315,6 @@ yabai-service mode\n\
   S: Start yabai\n\
   Q: Stop yabai\n\
   R: Restart yabai\n\
-  r: Reload yabai\n\
   C-<KANA> OR CMD-<KANA>: back to yabai-home mode\n\
   C-<EISU> OR CMD-<EISU>: back to yabai-off mode\",\
 100)"
@@ -329,13 +328,14 @@ yabaimode_service < ctrl - 0x66 ; default  # Go back to default mode.
 yabaimode_service < cmd - 0x66 ; default  # Go back to default mode.
 
 # yabaimode_service < shift - s : brew services start xorpse/formulae/yabai && hs -c "hs.alert.show(\"Started yabai service.\")"
-yabaimode_service < shift - s : brew services start koekeishiya/formulae/yabai && hs -c "hs.alert.show(\"Started yabai service.\")"
+yabaimode_service < shift - s : yabai --start-service && hs -c "hs.alert.show(\"Started yabai service.\")"
 # yabaimode_service < shift - q : brew services stop xorpse/formulae/yabai && hs -c "hs.alert.show(\"Stopped yabai service.\")"
-yabaimode_service < shift - q : brew services stop koekeishiya/formulae/yabai && hs -c "hs.alert.show(\"Stopped yabai service.\")"
+yabaimode_service < shift - q : yabai --stop-service && hs -c "hs.alert.show(\"Stopped yabai service.\")"
 # yabaimode_service < shift - r : brew services restart xorpse/formulae/yabai && hs -c "hs.alert.show(\"Restarted yabai service.\")"
-yabaimode_service < shift - r : brew services restart koekeishiya/formulae/yabai && hs -c "hs.alert.show(\"Restarted yabai service.\")"
+yabaimode_service < shift - r : yabai --stop-service && yabai --start-service && hs -c "hs.alert.show(\"Restarted yabai service.\")"
 # yabaimode_service < r : brew services reload xorpse/formulae/yabai && hs -c "hs.alert.show(\"Reloaded yabai service.\")"
-yabaimode_service < r : brew services reload koekeishiya/formulae/yabai && hs -c "hs.alert.show(\"Reloaded yabai service.\")"
+
+# yabaimode_service < r : yabai --stop-service && yabai --start-service && hs -c "hs.alert.show(\"Reloaded yabai service.\")"
 
 
 # f: Displays -----
